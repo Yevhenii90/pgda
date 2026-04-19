@@ -167,24 +167,36 @@ button:disabled { opacity: 0.55; cursor: wait; }
 .scroll-cue { position: absolute; bottom: 34px; left: 50%; display: grid; gap: 8px; place-items: center; color: var(--muted); font-family: "Orbitron", sans-serif; font-size: 0.62rem; letter-spacing: 0.18em; animation: bounce 1.8s ease-in-out infinite; }
 .scroll-cue i { width: 1px; height: 38px; background: linear-gradient(var(--cyan), transparent); }
 
-.stats-section { position: relative; min-height: 620px; padding: 140px 0 80px; }
+.stats-section {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(210px, 0.7fr) minmax(340px, 1fr) minmax(210px, 0.7fr);
+  grid-template-areas:
+    "humidity wind pressure"
+    "visibility wind feels";
+  gap: 18px;
+  align-items: stretch;
+  padding: 95px 0 60px;
+}
 .ghost-word { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.025); font-family: "Orbitron", sans-serif; font-size: clamp(5rem, 19vw, 16rem); font-weight: 900; white-space: nowrap; pointer-events: none; }
-.stat-card { position: absolute; z-index: 3; width: 290px; padding: 20px; border-radius: 18px; transition: transform 400ms ease; }
-.stat-card:hover { transform: rotate(0deg) scale(1.02); }
+.stat-card { position: relative; z-index: 3; display: grid; align-content: center; min-height: 155px; padding: 22px; border-radius: 20px; transition: transform 400ms ease; }
+.stat-card:hover { transform: translateY(-3px); }
 .stat-icon { color: var(--cyan); font-size: 1.4rem; }
 .stat-card p { margin: 8px 0 4px; color: var(--muted); font-family: "Orbitron", sans-serif; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; }
 .stat-card strong { font-family: "Orbitron", sans-serif; font-size: 2rem; }
-.stat-humidity { left: 3%; top: 90px; }
-.stat-visibility { left: 22%; top: 210px; }
-.stat-pressure { right: 8%; top: 90px; }
-.stat-feels { right: 0; top: 260px; }
-.tilt-left { transform: rotate(-2deg); }
-.tilt-right { transform: rotate(2deg); }
-.tilt-left-soft { transform: rotate(-1deg); }
-.tilt-right-soft { transform: rotate(3deg); }
+.stat-humidity { grid-area: humidity; }
+.stat-visibility { grid-area: visibility; }
+.stat-pressure { grid-area: pressure; }
+.stat-feels { grid-area: feels; }
+.tilt-left,
+.tilt-right,
+.tilt-left-soft,
+.tilt-right-soft {
+  transform: none;
+}
 
-.wind-orb { position: relative; z-index: 5; width: 350px; margin: 30px auto 0; padding: 26px; border-radius: 24px; text-align: center; transition: transform 400ms ease; }
-.wind-orb:hover { transform: scale(1.03); }
+.wind-orb { position: relative; z-index: 5; grid-area: wind; display: grid; align-content: center; width: 100%; min-height: 330px; margin: 0; padding: 28px; border-radius: 28px; text-align: center; transition: transform 400ms ease; }
+.wind-orb:hover { transform: translateY(-3px); }
 .compass { position: relative; width: 170px; height: 170px; margin: 18px auto; border: 1px solid rgba(139,92,255,0.26); border-radius: 50%; box-shadow: inset 0 0 42px rgba(139,92,255,0.12), 0 0 42px rgba(46,252,255,0.08); }
 .compass span { position: absolute; color: var(--muted); font-family: "Orbitron", sans-serif; font-size: 0.72rem; }
 .compass span:nth-child(1) { top: 10px; left: 50%; transform: translateX(-50%); }
@@ -331,9 +343,17 @@ button:disabled { opacity: 0.55; cursor: wait; }
   .hero-temp { margin-left: 0; padding-top: 30px; }
   .weather-visual { position: relative; right: auto; top: auto; margin: 40px auto 0; }
   .scroll-cue { position: relative; right: auto; bottom: auto; left: auto; margin-top: 26px; }
-  .stats-section { min-height: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 70px 0; }
+  .stats-section {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "wind wind"
+      "humidity pressure"
+      "visibility feels";
+    gap: 16px;
+    padding: 70px 0;
+  }
   .stat-card, .wind-orb { position: relative; inset: auto; width: auto; margin: 0; }
-  .wind-orb { grid-column: 1 / -1; justify-self: center; width: min(360px, 100%); }
+  .wind-orb { justify-self: stretch; min-height: 300px; }
   .forecast-grid, .environment-section { grid-template-columns: 1fr; }
   .weekly-card { grid-column: auto; grid-row: auto; margin-top: 0; }
   .uv-card, .sun-card { width: auto; margin: 0; }
@@ -348,7 +368,15 @@ button:disabled { opacity: 0.55; cursor: wait; }
   .condition-line span, .scroll-cue { display: none; }
   .hero-feels, .status { margin-left: 0; }
   .weather-visual { width: min(280px, 78vw); height: min(280px, 78vw); }
-  .stats-section { grid-template-columns: 1fr; }
+  .stats-section {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "wind"
+      "humidity"
+      "pressure"
+      "visibility"
+      "feels";
+  }
   .day-card { grid-template-columns: 52px 30px 1fr; }
   .day-card .bar, .day-card .temps { grid-column: 1 / -1; }
 }
