@@ -1,0 +1,6 @@
+.DS_Store
+.netlify/
+QA_bible/
+node_modules/
+dist/
+build/

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PGDA</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="18" fill="%2307101f"/%3E%3Ctext x="32" y="40" text-anchor="middle" font-size="28"%3E%E2%9B%85%3C/text%3E%3C/svg%3E' />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="dynamic-bg" aria-hidden="true">
+      <span class="orb orb-cyan"></span>
+      <span class="orb orb-magenta"></span>
+      <span class="orb orb-purple"></span>
+      <span class="scan-line"></span>
+    </div>
+    <div class="data-rain" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="weather-snow-system" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="weather-lightning-system" aria-hidden="true">
+      <span></span><span></span>
+    </div>
+
+    <main class="app" aria-labelledby="app-title">
+      <section class="hero-panel">
+        <div class="location-card glass-card">
+          <span class="pin" aria-hidden="true">⌾</span>
+          <div>
+            <p class="micro-label">ЛОКАЦІЯ</p>
+            <h1 id="app-title"><span id="city-name">Софіївська Борщагівка</span></h1>
+            <p id="current-date">Завантаження системи...</p>
+          </div>
+          <div class="time-chip" id="live-time">--:--:--</div>
+        </div>
+
+        <aside class="village-card glass-card" aria-label="Фокус прогнозу">
+          <p class="micro-label">ОДНЕ СЕЛО · ЖИВА ПОГОДА</p>
+          <strong>Софіївська Борщагівка</strong>
+          <span>Київська область · 50.4111°N 30.3600°E</span>
+        </aside>
+
+        <div class="hero-temp">
+          <p class="temperature" id="temperature">--°</p>
+          <div class="condition-line">
+            <span></span>
+            <p id="condition">Очікуємо дані</p>
+          </div>
+          <p class="hero-feels">Відчувається як <strong id="feels-like">--°</strong></p>
+          <p class="status" id="status" role="status" aria-live="polite">
+            Завантажую погоду для Софіївської Борщагівки...
+          </p>
+        </div>
+
+        <figure class="weather-visual" id="weather-visual">
+          <img class="weather-photo" id="weather-photo" alt="" hidden />
+          <span class="weather-icon" id="weather-icon" aria-hidden="true">☀</span>
+          <i></i><i></i><i></i>
+        </figure>
+
+        <div class="scroll-cue" aria-hidden="true">
+          <span>ГОРТАЙ</span>
+          <i></i>
+        </div>
+      </section>
+
+      <section class="stats-section" aria-label="Поточні метрики">
+        <div class="ghost-word">ПОГОДА</div>
+        <article class="stat-card stat-humidity glass-card tilt-left">
+          <span class="stat-icon">◌</span>
+          <p>Вологість</p>
+          <strong id="humidity">--%</strong>
+        </article>
+        <article class="stat-card stat-visibility glass-card tilt-right">
+          <span class="stat-icon">◉</span>
+          <p>Видимість</p>
+          <strong id="visibility">-- км</strong>
+        </article>
+        <article class="stat-card stat-pressure glass-card tilt-right-soft">
+          <span class="stat-icon">⌁</span>
+          <p>Тиск</p>
+          <strong id="pressure">-- hPa</strong>
+        </article>
+        <article class="stat-card stat-feels glass-card tilt-left-soft">
+          <span class="stat-icon">♨</span>
+          <p>Відчувається</p>
+          <strong id="feels-like-card">--°</strong>
+        </article>
+
+        <article class="wind-orb glass-card">
+          <p class="micro-label">ВІТЕР</p>
+          <div class="compass" aria-hidden="true">
+            <span>Пн</span><span>Сх</span><span>Пд</span><span>Зх</span>
+            <b id="wind-arrow">➤</b>
+          </div>
+          <strong id="wind">-- км/год</strong>
+          <p id="wind-direction">-- вітер</p>
+        </article>
+      </section>
+
+      <section class="forecast-section" aria-label="Прогноз">
+        <div class="section-kicker">⚡ ЧАСОВИЙ ПРОГНОЗ</div>
+        <h2>Дані прогнозу</h2>
+        <div class="forecast-grid">
+          <article class="forecast-card glass-card skew-left">
+            <div class="card-heading">ПОГОДИННИЙ ПРОГНОЗ</div>
+            <div class="hourly-strip" id="hourly-list"></div>
+          </article>
+          <article class="forecast-card uv-card glass-card skew-right">
+            <div class="card-heading">УФ ІНДЕКС</div>
+            <div class="uv-row">
+              <span>☼</span>
+              <strong id="uv-index">--</strong>
+              <p id="uv-level">--</p>
+            </div>
+            <div class="uv-track"><span id="uv-track-fill"></span></div>
+          </article>
+          <article class="forecast-card weekly-card glass-card skew-right-soft">
+            <div class="card-heading">ПРОГНОЗ НА 7 ДНІВ</div>
+            <div class="daily-list" id="daily-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="environment-section" aria-label="Середовище">
+        <article class="air-card glass-card skew-left-soft">
+          <div class="card-heading">ЯКІСТЬ ПОВІТРЯ</div>
+          <div class="air-layout">
+            <div class="air-score" id="air-score">
+              <svg viewBox="0 0 100 100" aria-hidden="true">
+                <defs>
+                  <linearGradient id="aqi-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="var(--aqi-color, #22c55e)" />
+                    <stop offset="100%" stop-color="var(--cyan)" />
+                  </linearGradient>
+                </defs>
+                <circle class="aqi-track" cx="50" cy="50" r="42"></circle>
+                <circle class="aqi-progress" id="aqi-progress" cx="50" cy="50" r="42"></circle>
+              </svg>
+              <strong id="air-quality-index">--</strong>
+              <span>ІЯП</span>
+            </div>
+            <div>
+              <div class="aqi-status">
+                <span id="aqi-level">--</span>
+                <p id="aqi-description">Очікуємо оцінку повітря</p>
+              </div>
+              <h2 id="weather-advice">Готуємо прогноз.</h2>
+              <p id="weather-detail">Щойно отримаємо дані, підкажемо, як краще планувати день.</p>
+              <div class="aqi-scale" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i>
+              </div>
+            </div>
+          </div>
+          <div class="air-components" id="air-components">
+            <button type="button" data-component="pm25">
+              <span>PM2.5</span>
+              <strong id="aqi-pm25">--</strong>
+            </button>
+            <button type="button" data-component="pm10">
+              <span>PM10</span>
+              <strong id="aqi-pm10">--</strong>
+            </button>
+            <button type="button" data-component="o3">
+              <span>O₃</span>
+              <strong id="aqi-o3">--</strong>
+            </button>
+            <button type="button" data-component="no2">
+              <span>NO₂</span>
+              <strong id="aqi-no2">--</strong>
+            </button>
+          </div>
+        </article>
+
+        <article class="sun-card glass-card skew-right">
+          <div class="card-heading">СХІД І ЗАХІД</div>
+          <div class="sun-arc" aria-hidden="true"><span></span></div>
+          <div class="sun-times">
+            <p>Схід <strong id="sunrise">--:--</strong></p>
+            <p>Захід <strong id="sunset">--:--</strong></p>
+          </div>
+        </article>
+      </section>
+
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
