@@ -181,7 +181,6 @@ button:disabled { opacity: 0.55; cursor: wait; }
   margin: 0 auto;
   padding: 80px 0 56px;
 }
-.ghost-word { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.025); font-family: "Orbitron", sans-serif; font-size: clamp(5rem, 19vw, 16rem); font-weight: 900; white-space: nowrap; pointer-events: none; }
 .stat-card { position: relative; z-index: 3; display: grid; align-content: center; min-height: 150px; padding: 22px; border-radius: 20px; transition: transform 400ms ease; }
 .stat-card:hover { transform: translateY(-3px); }
 .stat-icon { color: var(--cyan); font-size: 1.4rem; }
