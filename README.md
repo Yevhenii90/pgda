@@ -1,43 +1,21 @@
-# Decision Debugger
+# PGDA
 
-A minimal structured decision analysis tool built with Next.js, React, TypeScript, Tailwind CSS, and the App Router.
+Статичний погодний застосунок українською мовою для Софіївської Борщагівки.
 
-## What It Does
+## Що вміє
 
-- Accepts a decision and optional context.
-- Lets the user choose an analysis mode: Balanced, Critical, Practical, or Fast check.
-- Calls `/api/analyze` for a structured LLM response.
-- Validates the JSON response before rendering.
-- Stores the last 10 successful analyses in `localStorage`.
-- Lets users reopen, delete, and copy previous results.
+- показувати актуальну погоду тільки для Софіївської Борщагівки;
+- показувати температуру, вітер, вологість і відчутну температуру;
+- відображати погодинний прогноз і прогноз на 7 днів;
+- динамічно змінювати favicon і назву вкладки відповідно до погоди;
+- працювати без API-ключів через Open-Meteo.
 
-## Local Setup
+## Як запустити
 
-Create `.env.local`:
-
-```bash
-OPENAI_API_KEY=your_api_key_here
-```
-
-Optional:
+Відкрий `index.html` у браузері або запусти локальний сервер:
 
 ```bash
-OPENAI_MODEL=gpt-4.1-mini
+python3 -m http.server 5173
 ```
 
-Install dependencies and run the app:
-
-```bash
-npm install
-npm run dev
-```
-
-Open `http://localhost:3000`.
-
-## Scripts
-
-```bash
-npm run dev
-npm run build
-npm run lint
-```
+Після цього відкрий `http://localhost:5173`.
