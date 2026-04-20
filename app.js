@@ -4,6 +4,9 @@ const village = {
   longitude: 30.359975,
 };
 
+const weatherRefreshInterval = 10 * 60 * 1000;
+let isWeatherLoading = false;
+
 const elements = {
   favicon: document.querySelector("#favicon"),
   status: document.querySelector("#status"),
@@ -632,13 +635,19 @@ function renderDaily(daily) {
 }
 
 async function loadVillageWeather() {
+  if (isWeatherLoading) return;
+
+  isWeatherLoading = true;
+
   try {
     setStatus("Оновлюю прогноз для Софіївської Борщагівки...");
     const weather = await fetchWeather(village);
     renderWeather(village, weather);
-    setStatus("Оновлено для Софіївської Борщагівки.");
+    setStatus(`Оновлено для Софіївської Борщагівки. Наступне автооновлення приблизно за 10 хв.`);
   } catch (error) {
     setStatus(error.message || "Не вдалося оновити погоду для Софіївської Борщагівки.", true);
+  } finally {
+    isWeatherLoading = false;
   }
 }
 
@@ -654,3 +663,4 @@ elements.airComponents.addEventListener("click", (event) => {
 updateLiveTime();
 setInterval(updateLiveTime, 1000);
 loadVillageWeather();
+setInterval(loadVillageWeather, weatherRefreshInterval);
