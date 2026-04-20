@@ -358,25 +358,68 @@ button:disabled { opacity: 0.55; cursor: wait; }
   --marker-bg: #d8e7ff;
   --marker-shadow: 0 0 26px rgba(216,231,255,0.72), 0 0 64px rgba(139,92,255,0.22);
   opacity: 0.92;
+  overflow: hidden;
+  border: 1px solid rgba(216,231,255,0.5);
 }
 .sun-arc.is-night span::before {
   position: absolute;
-  inset: -1px 5px 3px -5px;
+  inset: 0;
   content: "";
   border-radius: 50%;
-  background: rgba(14,18,42,0.96);
-  transform: translateX(6px);
+  background: rgba(14,18,42,0.98);
 }
-.sun-arc.is-night span::after {
+.sun-arc.is-night[data-moon-phase="0"] span {
+  --marker-bg: #11172d;
+}
+.sun-arc.is-night[data-moon-phase="0"] span::before,
+.sun-arc.is-night[data-moon-phase="2"] span::before,
+.sun-arc.is-night[data-moon-phase="4"] span::before,
+.sun-arc.is-night[data-moon-phase="6"] span::before {
+  display: none;
+}
+.sun-arc.is-night[data-moon-phase="1"] span::before {
+  transform: translateX(-7px);
+}
+.sun-arc.is-night[data-moon-phase="2"] span {
+  background: linear-gradient(90deg, rgba(14,18,42,0.98) 0 50%, #d8e7ff 50% 100%);
+}
+.sun-arc.is-night[data-moon-phase="3"] span::before {
+  transform: translateX(-18px);
+}
+.sun-arc.is-night[data-moon-phase="4"] span {
+  --marker-bg: #edf5ff;
+}
+.sun-arc.is-night[data-moon-phase="5"] span::before {
+  transform: translateX(18px);
+}
+.sun-arc.is-night[data-moon-phase="6"] span {
+  background: linear-gradient(90deg, #d8e7ff 0 50%, rgba(14,18,42,0.98) 50% 100%);
+}
+.sun-arc.is-night[data-moon-phase="7"] span::before {
+  transform: translateX(7px);
+}
+.sun-star {
   position: absolute;
-  top: -28px;
-  left: 40px;
-  width: 4px;
-  height: 4px;
+  display: none;
+  width: 18px;
+  height: 18px;
   content: "";
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: -58px 20px 0 1px rgba(255,255,255,0.8), -30px -6px 0 rgba(255,255,255,0.72), 22px 24px 0 rgba(255,255,255,0.74);
+  color: rgba(255,255,255,0.84);
+  font-style: normal;
+  text-shadow: 0 0 12px rgba(216,231,255,0.7);
+  animation: star-twinkle 2.8s ease-in-out infinite;
+}
+.sun-star::before {
+  content: "✦";
+}
+.sun-arc.is-night .sun-star {
+  display: block;
+}
+.star-one { top: 16%; left: 18%; font-size: 1rem; }
+.star-two { top: 38%; right: 16%; font-size: 0.8rem; animation-delay: -1.1s; }
+.star-three { top: 12%; right: 34%; font-size: 0.68rem; animation-delay: -2s; }
+.sun-arc:not(.is-night) .sun-star {
+  display: none;
 }
 .sun-arc.is-before-sunrise {
   --sun-x: 0%;
@@ -403,6 +446,7 @@ button:disabled { opacity: 0.55; cursor: wait; }
 @keyframes icon-cloud-drift { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
 @keyframes icon-cloud-pass { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
 @keyframes sun-peek { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(2px, -2px); } }
+@keyframes star-twinkle { 0%, 100% { opacity: 0.46; transform: scale(0.88); } 50% { opacity: 1; transform: scale(1.08); } }
 @keyframes icon-rain-drop { 0% { transform: translateY(-4px); opacity: 0; } 20%, 80% { opacity: 1; } 100% { transform: translateY(10px); opacity: 0; } }
 @keyframes storm-rumble { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-1px); } 75% { transform: translateX(1px); } }
 @keyframes icon-lightning { 0%, 90%, 100% { opacity: 1; } 92%, 94% { opacity: 0.3; } 93% { opacity: 1; fill: #fff; } }

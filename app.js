@@ -14,6 +14,17 @@ const sunState = {
   sunset: null,
 };
 
+const moonPhaseLabels = [
+  "молодик",
+  "молодий місяць",
+  "перша чверть",
+  "зростаючий місяць",
+  "повня",
+  "спадний місяць",
+  "остання чверть",
+  "старий місяць",
+];
+
 const elements = {
   favicon: document.querySelector("#favicon"),
   status: document.querySelector("#status"),
@@ -200,14 +211,43 @@ function updateSunPosition(sunrise = sunState.sunrise, sunset = sunState.sunset)
   elements.sunArc.classList.toggle("is-night", !isDaylight);
   elements.sunArc.classList.toggle("is-before-sunrise", rawProgress < 0);
   elements.sunArc.classList.toggle("is-after-sunset", rawProgress > 1);
+  elements.sunArc.dataset.moonPhase = getMoonPhase(now);
 
   if (rawProgress < 0) {
-    elements.sunPosition.textContent = "ще не зійшло";
+    elements.sunPosition.textContent = moonPhaseLabels[getMoonPhase(now)];
   } else if (rawProgress > 1) {
-    elements.sunPosition.textContent = "за горизонтом";
+    elements.sunPosition.textContent = moonPhaseLabels[getMoonPhase(now)];
   } else {
     elements.sunPosition.textContent = `${Math.round(progress * 100)}% дня`;
   }
+}
+
+function getMoonPhase(date) {
+  const synodicMonth = 29.530588853;
+  const knownNewMoon = Date.UTC(2000, 0, 6, 18, 14);
+  const daysSinceNewMoon = (date.getTime() - knownNewMoon) / 86400000;
+  const phase = ((daysSinceNewMoon % synodicMonth) + synodicMonth) % synodicMonth;
+  return Math.floor((phase / synodicMonth) * 8 + 0.5) % 8;
+}
+
+function getSunCycle(daily) {
+  const now = new Date();
+  const todaySunrise = daily.sunrise?.[0] ? new Date(daily.sunrise[0]) : null;
+  const todaySunset = daily.sunset?.[0] ? new Date(daily.sunset[0]) : null;
+  const tomorrowSunrise = daily.sunrise?.[1] ? new Date(daily.sunrise[1]) : null;
+  const tomorrowSunset = daily.sunset?.[1] ? new Date(daily.sunset[1]) : null;
+
+  if (todaySunset && tomorrowSunrise && tomorrowSunset && now.getTime() > todaySunset.getTime()) {
+    return {
+      sunrise: tomorrowSunrise,
+      sunset: tomorrowSunset,
+    };
+  }
+
+  return {
+    sunrise: todaySunrise,
+    sunset: todaySunset,
+  };
 }
 
 function setStatus(message, isError = false) {
@@ -631,8 +671,7 @@ function renderWeather(place, weather) {
   elements.uvIndex.textContent = Math.round(uvIndex);
   elements.uvLevel.textContent = getUvLevel(uvIndex);
   elements.uvTrackFill.style.width = `${Math.min(100, Math.round((uvIndex / 11) * 100))}%`;
-  const sunrise = weather.daily.sunrise?.[0] ? new Date(weather.daily.sunrise[0]) : null;
-  const sunset = weather.daily.sunset?.[0] ? new Date(weather.daily.sunset[0]) : null;
+  const { sunrise, sunset } = getSunCycle(weather.daily);
   elements.sunrise.textContent = sunrise ? formatHour.format(sunrise) : "--:--";
   elements.sunset.textContent = sunset ? formatHour.format(sunset) : "--:--";
   updateSunPosition(sunrise, sunset);
