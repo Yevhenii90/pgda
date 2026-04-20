@@ -191,13 +191,15 @@ function updateSunPosition(sunrise = sunState.sunrise, sunset = sunState.sunset)
   const rawProgress = dayLength > 0 ? (now.getTime() - sunrise.getTime()) / dayLength : 0;
   const progress = Math.max(0, Math.min(1, rawProgress));
   const angle = Math.PI * progress;
-  const x = 6 + progress * 88;
-  const y = 88 - Math.sin(angle) * 70;
+  const x = progress * 100;
+  const y = 84 - Math.sin(angle) * 68;
   const isDaylight = rawProgress >= 0 && rawProgress <= 1;
 
   elements.sunArc.style.setProperty("--sun-x", `${x}%`);
   elements.sunArc.style.setProperty("--sun-y", `${y}%`);
   elements.sunArc.classList.toggle("is-night", !isDaylight);
+  elements.sunArc.classList.toggle("is-before-sunrise", rawProgress < 0);
+  elements.sunArc.classList.toggle("is-after-sunset", rawProgress > 1);
 
   if (rawProgress < 0) {
     elements.sunPosition.textContent = "ще не зійшло";

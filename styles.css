@@ -315,15 +315,18 @@ button:disabled { opacity: 0.55; cursor: wait; }
 .sun-arc {
   --sun-x: 50%;
   --sun-y: 24%;
+  --marker-bg: var(--yellow);
+  --marker-shadow: 0 0 30px var(--yellow), 0 0 70px rgba(255,215,90,0.35);
   position: relative;
   height: 132px;
-  overflow: hidden;
+  margin: 8px 26px 0;
+  overflow: visible;
 }
 .sun-arc::before {
   position: absolute;
-  right: 10px;
-  bottom: -74px;
-  left: 10px;
+  right: 0;
+  bottom: 0;
+  left: 0;
   height: 176px;
   content: "";
   border-top: 3px solid var(--yellow);
@@ -332,9 +335,9 @@ button:disabled { opacity: 0.55; cursor: wait; }
 }
 .sun-arc::after {
   position: absolute;
-  right: 12px;
-  bottom: 30px;
-  left: 12px;
+  right: -2px;
+  bottom: 0;
+  left: -2px;
   height: 1px;
   content: "";
   background: linear-gradient(90deg, transparent, rgba(255,215,90,0.22), transparent);
@@ -346,14 +349,42 @@ button:disabled { opacity: 0.55; cursor: wait; }
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--yellow);
-  box-shadow: 0 0 30px var(--yellow), 0 0 70px rgba(255,215,90,0.35);
+  background: var(--marker-bg);
+  box-shadow: var(--marker-shadow);
   transform: translate(-50%, -50%);
-  transition: top 900ms ease, left 900ms ease, opacity 300ms ease;
+  transition: top 900ms ease, left 900ms ease, opacity 300ms ease, background 300ms ease, box-shadow 300ms ease;
 }
 .sun-arc.is-night span {
-  opacity: 0.32;
-  filter: grayscale(0.3);
+  --marker-bg: #d8e7ff;
+  --marker-shadow: 0 0 26px rgba(216,231,255,0.72), 0 0 64px rgba(139,92,255,0.22);
+  opacity: 0.92;
+}
+.sun-arc.is-night span::before {
+  position: absolute;
+  inset: -1px 5px 3px -5px;
+  content: "";
+  border-radius: 50%;
+  background: rgba(14,18,42,0.96);
+  transform: translateX(6px);
+}
+.sun-arc.is-night span::after {
+  position: absolute;
+  top: -28px;
+  left: 40px;
+  width: 4px;
+  height: 4px;
+  content: "";
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: -58px 20px 0 1px rgba(255,255,255,0.8), -30px -6px 0 rgba(255,255,255,0.72), 22px 24px 0 rgba(255,255,255,0.74);
+}
+.sun-arc.is-before-sunrise {
+  --sun-x: 0%;
+  --sun-y: 92%;
+}
+.sun-arc.is-after-sunset {
+  --sun-x: 100%;
+  --sun-y: 92%;
 }
 .sun-times { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .sun-times p { margin: 0; color: var(--muted); }
