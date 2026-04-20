@@ -14,17 +14,6 @@ const sunState = {
   sunset: null,
 };
 
-const moonPhaseLabels = [
-  "молодик",
-  "молодий місяць",
-  "перша чверть",
-  "зростаючий місяць",
-  "повня",
-  "спадний місяць",
-  "остання чверть",
-  "старий місяць",
-];
-
 const elements = {
   favicon: document.querySelector("#favicon"),
   status: document.querySelector("#status"),
@@ -214,9 +203,9 @@ function updateSunPosition(sunrise = sunState.sunrise, sunset = sunState.sunset)
   elements.sunArc.dataset.moonPhase = getMoonPhase(now);
 
   if (rawProgress < 0) {
-    elements.sunPosition.textContent = moonPhaseLabels[getMoonPhase(now)];
+    elements.sunPosition.textContent = "ніч";
   } else if (rawProgress > 1) {
-    elements.sunPosition.textContent = moonPhaseLabels[getMoonPhase(now)];
+    elements.sunPosition.textContent = "ніч";
   } else {
     elements.sunPosition.textContent = `${Math.round(progress * 100)}% дня`;
   }
