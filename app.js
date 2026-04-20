@@ -5,7 +5,10 @@ const village = {
 };
 
 const weatherRefreshInterval = 10 * 60 * 1000;
+const titleMarqueeInterval = 900;
 let isWeatherLoading = false;
+let titleMarqueeText = "PGDA";
+let titleMarqueeIndex = 0;
 
 const elements = {
   favicon: document.querySelector("#favicon"),
@@ -245,7 +248,22 @@ function getShortPlaceName(placeName) {
 
 function updatePageTitle(placeName, temperature, condition) {
   const city = getShortPlaceName(placeName);
-  document.title = `PGDA · ${city} · ${round(temperature)}° · ${condition}`;
+  titleMarqueeText = `PGDA · ${city} · ${round(temperature)}° · ${condition}`;
+  titleMarqueeIndex = 0;
+  document.title = titleMarqueeText;
+}
+
+function updateTitleMarquee() {
+  if (titleMarqueeText.length <= 24) {
+    document.title = titleMarqueeText;
+    return;
+  }
+
+  const spacer = "     ";
+  const loop = `${titleMarqueeText}${spacer}`;
+  const offset = titleMarqueeIndex % loop.length;
+  document.title = `${loop.slice(offset)}${loop.slice(0, offset)}`;
+  titleMarqueeIndex += 1;
 }
 
 function getWeatherSvg(condition) {
@@ -662,5 +680,6 @@ elements.airComponents.addEventListener("click", (event) => {
 
 updateLiveTime();
 setInterval(updateLiveTime, 1000);
+setInterval(updateTitleMarquee, titleMarqueeInterval);
 loadVillageWeather();
 setInterval(loadVillageWeather, weatherRefreshInterval);
