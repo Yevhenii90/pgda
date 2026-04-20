@@ -183,9 +183,12 @@
 
         <article class="sun-card glass-card skew-right">
           <div class="card-heading">СХІД І ЗАХІД</div>
-          <div class="sun-arc" aria-hidden="true"><span></span></div>
+          <div class="sun-arc" id="sun-arc" aria-label="Поточне положення сонця">
+            <span id="sun-marker"></span>
+          </div>
           <div class="sun-times">
             <p>Схід <strong id="sunrise">--:--</strong></p>
+            <p>Зараз <strong id="sun-position">--</strong></p>
             <p>Захід <strong id="sunset">--:--</strong></p>
           </div>
         </article>

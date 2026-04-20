@@ -9,6 +9,10 @@ const titleMarqueeInterval = 900;
 let isWeatherLoading = false;
 let titleMarqueeText = "PGDA";
 let titleMarqueeIndex = 0;
+const sunState = {
+  sunrise: null,
+  sunset: null,
+};
 
 const elements = {
   favicon: document.querySelector("#favicon"),
@@ -32,6 +36,9 @@ const elements = {
   uvIndex: document.querySelector("#uv-index"),
   uvLevel: document.querySelector("#uv-level"),
   uvTrackFill: document.querySelector("#uv-track-fill"),
+  sunArc: document.querySelector("#sun-arc"),
+  sunMarker: document.querySelector("#sun-marker"),
+  sunPosition: document.querySelector("#sun-position"),
   sunrise: document.querySelector("#sunrise"),
   sunset: document.querySelector("#sunset"),
   airScore: document.querySelector("#air-score"),
@@ -171,6 +178,34 @@ function updateLiveTime() {
     minute: "2-digit",
     second: "2-digit",
   }).format(new Date());
+}
+
+function updateSunPosition(sunrise = sunState.sunrise, sunset = sunState.sunset) {
+  if (!elements.sunArc || !elements.sunPosition || !sunrise || !sunset) return;
+
+  sunState.sunrise = sunrise;
+  sunState.sunset = sunset;
+
+  const now = new Date();
+  const dayLength = sunset.getTime() - sunrise.getTime();
+  const rawProgress = dayLength > 0 ? (now.getTime() - sunrise.getTime()) / dayLength : 0;
+  const progress = Math.max(0, Math.min(1, rawProgress));
+  const angle = Math.PI * progress;
+  const x = 6 + progress * 88;
+  const y = 88 - Math.sin(angle) * 70;
+  const isDaylight = rawProgress >= 0 && rawProgress <= 1;
+
+  elements.sunArc.style.setProperty("--sun-x", `${x}%`);
+  elements.sunArc.style.setProperty("--sun-y", `${y}%`);
+  elements.sunArc.classList.toggle("is-night", !isDaylight);
+
+  if (rawProgress < 0) {
+    elements.sunPosition.textContent = "ще не зійшло";
+  } else if (rawProgress > 1) {
+    elements.sunPosition.textContent = "за горизонтом";
+  } else {
+    elements.sunPosition.textContent = `${Math.round(progress * 100)}% дня`;
+  }
 }
 
 function setStatus(message, isError = false) {
@@ -594,8 +629,11 @@ function renderWeather(place, weather) {
   elements.uvIndex.textContent = Math.round(uvIndex);
   elements.uvLevel.textContent = getUvLevel(uvIndex);
   elements.uvTrackFill.style.width = `${Math.min(100, Math.round((uvIndex / 11) * 100))}%`;
-  elements.sunrise.textContent = weather.daily.sunrise?.[0] ? formatHour.format(new Date(weather.daily.sunrise[0])) : "--:--";
-  elements.sunset.textContent = weather.daily.sunset?.[0] ? formatHour.format(new Date(weather.daily.sunset[0])) : "--:--";
+  const sunrise = weather.daily.sunrise?.[0] ? new Date(weather.daily.sunrise[0]) : null;
+  const sunset = weather.daily.sunset?.[0] ? new Date(weather.daily.sunset[0]) : null;
+  elements.sunrise.textContent = sunrise ? formatHour.format(sunrise) : "--:--";
+  elements.sunset.textContent = sunset ? formatHour.format(sunset) : "--:--";
+  updateSunPosition(sunrise, sunset);
   renderAirQuality(airQuality);
   elements.weatherAdvice.textContent = adviceTitle;
   elements.weatherDetail.textContent = adviceDetail;
@@ -680,6 +718,7 @@ elements.airComponents.addEventListener("click", (event) => {
 
 updateLiveTime();
 setInterval(updateLiveTime, 1000);
+setInterval(() => updateSunPosition(), 60 * 1000);
 setInterval(updateTitleMarquee, titleMarqueeInterval);
 loadVillageWeather();
 setInterval(loadVillageWeather, weatherRefreshInterval);
