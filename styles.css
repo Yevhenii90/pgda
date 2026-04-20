@@ -429,7 +429,8 @@ button:disabled { opacity: 0.55; cursor: wait; }
   --sun-x: 100%;
   --sun-y: 92%;
 }
-.sun-times { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.sun-times { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.sun-times p:last-child { text-align: right; }
 .sun-times p { margin: 0; color: var(--muted); }
 .sun-times strong { display: block; color: var(--text); font-family: "Orbitron", sans-serif; }
 @keyframes data-rain { 0% { transform: translateY(-100px); opacity: 0; } 20% { opacity: 0.75; } 100% { transform: translateY(110vh); opacity: 0; } }

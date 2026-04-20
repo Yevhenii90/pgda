@@ -38,7 +38,6 @@ const elements = {
   uvTrackFill: document.querySelector("#uv-track-fill"),
   sunArc: document.querySelector("#sun-arc"),
   sunMarker: document.querySelector("#sun-marker"),
-  sunPosition: document.querySelector("#sun-position"),
   sunrise: document.querySelector("#sunrise"),
   sunset: document.querySelector("#sunset"),
   airScore: document.querySelector("#air-score"),
@@ -181,7 +180,7 @@ function updateLiveTime() {
 }
 
 function updateSunPosition(sunrise = sunState.sunrise, sunset = sunState.sunset) {
-  if (!elements.sunArc || !elements.sunPosition || !sunrise || !sunset) return;
+  if (!elements.sunArc || !sunrise || !sunset) return;
 
   sunState.sunrise = sunrise;
   sunState.sunset = sunset;
@@ -202,13 +201,6 @@ function updateSunPosition(sunrise = sunState.sunrise, sunset = sunState.sunset)
   elements.sunArc.classList.toggle("is-after-sunset", rawProgress > 1);
   elements.sunArc.dataset.moonPhase = getMoonPhase(now);
 
-  if (rawProgress < 0) {
-    elements.sunPosition.textContent = "ніч";
-  } else if (rawProgress > 1) {
-    elements.sunPosition.textContent = "ніч";
-  } else {
-    elements.sunPosition.textContent = `${Math.round(progress * 100)}% дня`;
-  }
 }
 
 function getMoonPhase(date) {
