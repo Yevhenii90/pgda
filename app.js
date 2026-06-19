@@ -86,14 +86,18 @@ function setStatus(message, isError = false) {
   elements.status.classList.toggle("is-error", isError);
 }
 
+function updateDateLockup(date) {
+  elements.weekdayLabel.textContent = weekdays[date.getDay()];
+  elements.dateLabel.textContent = formatDate(date);
+}
+
 function updateLiveClock() {
   const now = new Date();
   const hours = String(now.getHours()).padStart(2, "0");
   const minutes = String(now.getMinutes()).padStart(2, "0");
 
   elements.liveHours.textContent = `${hours}:${minutes}`;
-  elements.weekdayLabel.textContent = weekdays[now.getDay()];
-  elements.dateLabel.textContent = formatDate(now);
+  if (!weatherData) updateDateLockup(now);
 }
 
 function getFaviconArtwork(condition) {
@@ -214,6 +218,7 @@ function renderSelectedDay() {
   elements.temperature.textContent = `${temperature}°`;
   elements.cardDate.textContent = formatDate(selectedDate);
   elements.condition.textContent = conditionLabel;
+  updateDateLockup(selectedDate);
 
   applyWeatherScene(conditionType);
   updateFavicon(conditionType);
