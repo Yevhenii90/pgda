@@ -328,6 +328,21 @@ body:not(.condition-clear):not(.condition-light-rain) .weather-card__heading h1 
   mix-blend-mode: difference;
 }
 
+body.condition-partly-cloudy .weather-card .card-surface {
+  background: #111114;
+}
+
+body.condition-partly-cloudy .weather-card,
+body.condition-partly-cloudy .weather-card__heading h1,
+body.condition-partly-cloudy .weather-card__footer p,
+body.condition-partly-cloudy .weather-card__footer p:first-child {
+  color: #fff;
+}
+
+body.condition-partly-cloudy .weather-card__heading h1 {
+  mix-blend-mode: normal;
+}
+
 @keyframes cloud-drift { from { translate: -7px 2px; } to { translate: 9px -4px; } }
 @keyframes rain { from { transform: translateY(-28px); } to { transform: translateY(20px); } }
 @keyframes snow { from { background-position: 4px 0, 19px 11px; } to { background-position: 24px 152px, -5px 125px; } }
