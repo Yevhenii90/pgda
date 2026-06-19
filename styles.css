@@ -292,6 +292,41 @@ body.condition-strong-wind .forecast-card { transform: translate(38px, 15px) rot
 body.condition-rain .studio, body.condition-heavy-rain .studio { --studio-top: #dddcd9; --studio-bottom: #c9c7c3; }
 body.condition-storm .studio { --studio-top: #cbc9c5; --studio-bottom: #aaa8a5; }
 
+/* Shared split-card system. New weather states only need to set --weather-panel. */
+body { --weather-panel: #202024; --weather-panel-text: #f5f4f1; }
+body.condition-clear,
+body.condition-light-rain,
+body.condition-snow,
+body.condition-heavy-snow,
+body.condition-frost { --weather-panel-text: #252527; }
+body.condition-partly-cloudy { --weather-panel: #171719; }
+body.condition-cloudy { --weather-panel: #343438; }
+body.condition-overcast { --weather-panel: #4a4a4e; }
+body.condition-drizzle { --weather-panel: #626267; }
+body.condition-rain { --weather-panel: #29292d; }
+body.condition-heavy-rain { --weather-panel: #111114; }
+body.condition-storm { --weather-panel: #0d0d0f; }
+body.condition-snow,
+body.condition-heavy-snow { --weather-panel: #d8d7d4; }
+body.condition-fog { --weather-panel: rgba(159, 159, 160, .72); }
+body.condition-frost { --weather-panel: #d1d0cd; }
+body.condition-wind { --weather-panel: #3c3c40; }
+body.condition-strong-wind { --weather-panel: #242428; }
+
+body:not(.condition-clear):not(.condition-light-rain) .card-surface {
+  background: linear-gradient(90deg, var(--weather-panel) 0 50%, #f5f4f1 50% 100%);
+}
+
+.weather-card { color: var(--weather-panel-text); }
+.weather-card__heading h1 { color: var(--weather-panel-text); }
+.weather-card__footer p,
+.weather-card__footer p:first-child { color: #252527; }
+
+body:not(.condition-clear):not(.condition-light-rain) .weather-card__heading h1 {
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
 @keyframes cloud-drift { from { translate: -7px 2px; } to { translate: 9px -4px; } }
 @keyframes rain { from { transform: translateY(-28px); } to { transform: translateY(20px); } }
 @keyframes snow { from { background-position: 4px 0, 19px 11px; } to { background-position: 24px 152px, -5px 125px; } }
