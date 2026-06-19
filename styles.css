@@ -174,7 +174,7 @@ button, input, select, textarea { font: inherit; }
   left: 52%;
   top: 338px;
   width: min(590px, 56vw);
-  min-height: 182px;
+  min-height: 210px;
   padding: 58px 24px 24px clamp(170px, 15vw, 210px);
   border: 1px solid rgba(255,255,255,.3);
   background: var(--glass);
@@ -184,10 +184,16 @@ button, input, select, textarea { font: inherit; }
 }
 .forecast-card__label { position: absolute; top: 20px; left: clamp(170px, 15vw, 210px); margin: 0; color: var(--muted); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; }
 .week-strip { display: grid; grid-template-columns: repeat(5, minmax(58px, 1fr)); gap: 10px; }
-.day-chip { display: grid; align-content: center; justify-items: center; gap: 12px; min-width: 0; min-height: 100px; padding: 10px 7px; border: 1px solid transparent; transition: background .25s ease, border-color .25s ease; }
+.day-chip { display: grid; align-content: start; gap: 8px; min-width: 0; padding: 7px; border: 1px solid transparent; transition: background .25s ease, border-color .25s ease; }
 .day-chip.is-selected { border-color: rgba(32,32,34,.12); background: rgba(255,255,255,.28); }
-.day-chip span { color: var(--ink); font-size: 1rem; font-weight: 600; }
-.day-chip strong { font-size: clamp(1.7rem, 2.4vw, 2.35rem); font-weight: 500; letter-spacing: -.08em; }
+.day-chip__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
+.day-chip span { color: var(--ink); font-size: .88rem; font-weight: 600; }
+.day-chip em { color: var(--muted); font-size: .68rem; font-style: normal; }
+.day-chip p { min-height: 2.3em; margin: 0; overflow: hidden; color: var(--muted); font-size: .67rem; line-height: 1.15; }
+.day-chip__temperatures { display: flex; align-items: baseline; gap: 5px; white-space: nowrap; }
+.day-chip strong { font-size: clamp(1.2rem, 1.8vw, 1.55rem); font-weight: 500; letter-spacing: -.07em; }
+.day-chip b { color: var(--muted); font-size: .82rem; font-weight: 400; }
+.day-chip small { color: var(--muted); font-size: .58rem; white-space: nowrap; }
 
 .decorative-planes { position: absolute; z-index: 5; left: calc(50% - 278px); top: 148px; display: flex; }
 .decorative-planes span { width: 68px; height: 68px; border: 1px solid rgba(255,255,255,.38); background: rgba(225,223,219,.43); box-shadow: 0 16px 34px rgba(55,51,47,.1); backdrop-filter: blur(10px); }
@@ -240,6 +246,8 @@ body.condition-storm .rain-particles, body.condition-storm .lightning { opacity:
 body.condition-storm .forecast-card { background: rgba(39,39,42,.78); color: #efeeeb; border-color: rgba(255,255,255,.12); }
 body.condition-storm .forecast-card__label, body.condition-storm .day-chip span { color: rgba(255,255,255,.45); }
 body.condition-storm .day-chip span, body.condition-storm .day-chip strong { color: #efeeeb; }
+body.condition-storm .day-chip em, body.condition-storm .day-chip p,
+body.condition-storm .day-chip b, body.condition-storm .day-chip small { color: rgba(255,255,255,.45); }
 body.condition-storm .day-chip.is-selected { border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.08); }
 
 body.condition-snow, body.condition-heavy-snow { --studio-top: #f4f3f0; --studio-bottom: #dfddd9; }
