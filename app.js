@@ -23,7 +23,6 @@ const elements = {
   yearLabel: document.querySelector("#year-label"),
   liveHours: document.querySelector("#live-hours"),
   cityName: document.querySelector("#city-name"),
-  regionLabel: document.querySelector("#region-label"),
   temperature: document.querySelector("#temperature"),
   cardDate: document.querySelector("#card-date"),
   condition: document.querySelector("#condition"),
@@ -171,7 +170,6 @@ function renderWeather(place, weather) {
   const currentDate = new Date(weather.current.time);
 
   elements.cityName.textContent = place.name;
-  elements.regionLabel.textContent = place.region;
   elements.temperature.textContent = `${temperature}°`;
   elements.cardDate.textContent = formatDate(currentDate);
   elements.condition.textContent = conditionLabel;
