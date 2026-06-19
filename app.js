@@ -7,6 +7,11 @@ const village = {
 
 const weatherRefreshInterval = 10 * 60 * 1000;
 const titleMarqueeInterval = 900;
+const weatherClasses = [
+  "clear", "partly-cloudy", "cloudy", "overcast", "drizzle", "rain",
+  "heavy-rain", "storm", "snow", "heavy-snow", "fog", "wind",
+  "strong-wind", "frost",
+];
 let titleMarqueeText = "PGDA";
 let titleMarqueeIndex = 0;
 let isWeatherLoading = false;
@@ -17,7 +22,6 @@ const elements = {
   dateLabel: document.querySelector("#date-label"),
   yearLabel: document.querySelector("#year-label"),
   liveHours: document.querySelector("#live-hours"),
-  liveMeridiem: document.querySelector("#live-meridiem"),
   cityName: document.querySelector("#city-name"),
   regionLabel: document.querySelector("#region-label"),
   temperature: document.querySelector("#temperature"),
@@ -25,116 +29,89 @@ const elements = {
   condition: document.querySelector("#condition"),
   dailyList: document.querySelector("#daily-list"),
   status: document.querySelector("#status"),
-  sunDisk: document.querySelector("#sun-disk"),
-  rainLayer: document.querySelector("#rain-layer"),
+  installation: document.querySelector("#installation"),
 };
 
 const weatherCodes = {
-  0: ["Ясно", "sunny"],
+  0: ["Ясно", "clear"],
   1: ["Переважно ясно", "partly-cloudy"],
   2: ["Мінлива хмарність", "partly-cloudy"],
-  3: ["Хмарно", "cloudy"],
-  45: ["Туман", "cloudy"],
-  48: ["Паморозь і туман", "cloudy"],
-  51: ["Легка мряка", "rain"],
-  53: ["Мряка", "rain"],
+  3: ["Суцільна хмарність", "overcast"],
+  45: ["Туман", "fog"],
+  48: ["Паморозь і туман", "frost"],
+  51: ["Легка мряка", "drizzle"],
+  53: ["Мряка", "drizzle"],
   55: ["Сильна мряка", "rain"],
-  56: ["Крижана мряка", "rain"],
-  57: ["Сильна крижана мряка", "rain"],
+  56: ["Крижана мряка", "frost"],
+  57: ["Сильна крижана мряка", "frost"],
   61: ["Невеликий дощ", "rain"],
   63: ["Дощ", "rain"],
-  65: ["Сильний дощ", "rain"],
-  66: ["Крижаний дощ", "rain"],
-  67: ["Сильний крижаний дощ", "rain"],
+  65: ["Сильний дощ", "heavy-rain"],
+  66: ["Крижаний дощ", "frost"],
+  67: ["Сильний крижаний дощ", "frost"],
   71: ["Невеликий сніг", "snow"],
   73: ["Сніг", "snow"],
-  75: ["Сильний сніг", "snow"],
+  75: ["Сильний сніг", "heavy-snow"],
   77: ["Сніжні зерна", "snow"],
   80: ["Короткий дощ", "rain"],
-  81: ["Зливи", "rain"],
-  82: ["Сильні зливи", "storm"],
+  81: ["Зливи", "heavy-rain"],
+  82: ["Сильні зливи", "heavy-rain"],
   85: ["Снігові зливи", "snow"],
-  86: ["Сильні снігові зливи", "snow"],
+  86: ["Сильні снігові зливи", "heavy-snow"],
   95: ["Гроза", "storm"],
   96: ["Гроза з градом", "storm"],
   99: ["Сильна гроза з градом", "storm"],
 };
 
-const titleDateFormatter = new Intl.DateTimeFormat("uk-UA", {
-  weekday: "short",
-  day: "2-digit",
-  month: "long",
-});
-
-const cardDateFormatter = new Intl.DateTimeFormat("uk-UA", {
-  day: "2-digit",
-  month: "long",
-});
-
-const weekDayFormatter = new Intl.DateTimeFormat("en-US", {
-  weekday: "short",
-});
+const weekdays = ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+const months = [
+  "січня", "лютого", "березня", "квітня", "травня", "червня",
+  "липня", "серпня", "вересня", "жовтня", "листопада", "грудня",
+];
 
 function getWeatherLabel(code) {
-  return weatherCodes[code] ?? ["Невідомо", "cloudy"];
+  return weatherCodes[code] ?? ["Хмарно", "cloudy"];
+}
+
+function formatDate(date) {
+  return `${String(date.getDate()).padStart(2, "0")} ${months[date.getMonth()]}`;
 }
 
 function setStatus(message, isError = false) {
   if (!elements.status) return;
   elements.status.textContent = message;
-  elements.status.style.color = isError ? "#8e3b32" : "rgba(31, 31, 34, 0.36)";
+  elements.status.classList.toggle("is-error", isError);
 }
 
 function updateLiveClock() {
   const now = new Date();
-  const hours24 = now.getHours();
-  const hours12 = hours24 % 12 || 12;
+  const hours = String(now.getHours()).padStart(2, "0");
   const minutes = String(now.getMinutes()).padStart(2, "0");
 
-  elements.liveHours.textContent = `${String(hours12).padStart(2, "0")}:${minutes}`;
-  elements.liveMeridiem.textContent = hours24 >= 12 ? "PM" : "AM";
-  elements.weekdayLabel.textContent = titleDateFormatter.format(now).split(",")[0] || "---";
-  elements.dateLabel.textContent = cardDateFormatter.format(now);
+  elements.liveHours.textContent = `${hours}:${minutes}`;
+  elements.weekdayLabel.textContent = weekdays[now.getDay()];
+  elements.dateLabel.textContent = formatDate(now);
   elements.yearLabel.textContent = String(now.getFullYear());
-}
-
-function getShortPlaceName(placeName) {
-  return placeName.split(",")[0].trim() || placeName;
 }
 
 function getFaviconArtwork(condition) {
   const icons = {
-    sunny: "☀️",
-    "partly-cloudy": "⛅",
-    cloudy: "☁️",
-    rain: "🌧️",
-    storm: "⛈️",
-    snow: "❄️",
+    clear: "☀", "partly-cloudy": "⛅", cloudy: "☁", overcast: "☁",
+    drizzle: "🌧", rain: "🌧", "heavy-rain": "🌧", storm: "⛈",
+    snow: "❄", "heavy-snow": "❄", fog: "≋", frost: "❄",
+    wind: "≋", "strong-wind": "≋",
   };
-
-  return icons[condition] ?? "☁️";
+  return icons[condition] ?? "☁";
 }
 
 function updateFavicon(condition) {
-  const emoji = getFaviconArtwork(condition);
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-      <defs>
-        <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#27272a"/>
-          <stop offset="100%" stop-color="#141416"/>
-        </linearGradient>
-      </defs>
-      <rect width="64" height="64" rx="18" fill="url(#g)"/>
-      <text x="32" y="42" text-anchor="middle" font-size="30">${emoji}</text>
-    </svg>
-  `;
+  const artwork = getFaviconArtwork(condition);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="18" fill="#242426"/><text x="32" y="42" text-anchor="middle" font-size="30" fill="#f2f1ee">${artwork}</text></svg>`;
   elements.favicon.href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
 }
 
 function updatePageTitle(placeName, temperature, condition) {
-  const city = getShortPlaceName(placeName);
-  titleMarqueeText = `PGDA · ${city} · ${Math.round(temperature)}° · ${condition}`;
+  titleMarqueeText = `PGDA · ${placeName} · ${Math.round(temperature)}° · ${condition}`;
   titleMarqueeIndex = 0;
   document.title = titleMarqueeText;
 }
@@ -144,9 +121,7 @@ function updateTitleMarquee() {
     document.title = titleMarqueeText;
     return;
   }
-
-  const spacer = "     ";
-  const loop = `${titleMarqueeText}${spacer}`;
+  const loop = `${titleMarqueeText}     `;
   const offset = titleMarqueeIndex % loop.length;
   document.title = `${loop.slice(offset)}${loop.slice(0, offset)}`;
   titleMarqueeIndex += 1;
@@ -164,41 +139,30 @@ async function fetchWeather(place) {
   });
 
   const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("Не вдалося завантажити прогноз.");
-  }
-
+  if (!response.ok) throw new Error("Не вдалося завантажити прогноз.");
   return response.json();
 }
 
 function applyWeatherScene(condition) {
-  document.body.classList.remove(
-    "condition-sunny",
-    "condition-partly-cloudy",
-    "condition-cloudy",
-    "condition-rain",
-    "condition-storm",
-    "condition-snow"
-  );
+  weatherClasses.forEach((name) => document.body.classList.remove(`condition-${name}`));
   document.body.classList.add(`condition-${condition}`);
 }
 
 function renderDaily(daily) {
-  const days = daily.time.slice(0, 5).map((time, index) => ({
-    day: weekDayFormatter.format(new Date(time)),
-    temp: Math.round(daily.temperature_2m_max[index]),
-  }));
+  const days = daily.time.slice(0, 5).map((time, index) => {
+    const date = new Date(`${time}T12:00:00`);
+    return {
+      day: weekdays[date.getDay()],
+      temp: Math.round(daily.temperature_2m_max[index]),
+    };
+  });
 
-  elements.dailyList.innerHTML = days
-    .map(
-      (item) => `
-        <article class="day-chip">
-          <span>${item.day}</span>
-          <strong>${item.temp}°</strong>
-        </article>
-      `
-    )
-    .join("");
+  elements.dailyList.innerHTML = days.map((item) => `
+    <article class="day-chip">
+      <span>${item.day}</span>
+      <strong>${item.temp}°</strong>
+    </article>
+  `).join("");
 }
 
 function renderWeather(place, weather) {
@@ -209,7 +173,7 @@ function renderWeather(place, weather) {
   elements.cityName.textContent = place.name;
   elements.regionLabel.textContent = place.region;
   elements.temperature.textContent = `${temperature}°`;
-  elements.cardDate.textContent = cardDateFormatter.format(currentDate);
+  elements.cardDate.textContent = formatDate(currentDate);
   elements.condition.textContent = conditionLabel;
 
   applyWeatherScene(conditionType);
@@ -218,15 +182,24 @@ function renderWeather(place, weather) {
   renderDaily(weather.daily);
 }
 
+function enableSubtleParallax() {
+  if (!elements.installation || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  window.addEventListener("pointermove", (event) => {
+    const x = (event.clientX / window.innerWidth - 0.5) * 8;
+    const y = (event.clientY / window.innerHeight - 0.5) * 6;
+    elements.installation.style.setProperty("--scene-shift-x", `${x}px`);
+    elements.installation.style.setProperty("--scene-shift-y", `${y}px`);
+  }, { passive: true });
+}
+
 async function loadVillageWeather() {
   if (isWeatherLoading) return;
   isWeatherLoading = true;
-
   try {
-    setStatus("Оновлюю прогноз для Софіївської Борщагівки...");
+    setStatus("Оновлюю актуальну погоду...");
     const weather = await fetchWeather(village);
     renderWeather(village, weather);
-    setStatus("Оновлено. Наступне автооновлення приблизно за 10 хв.");
+    setStatus("Дані оновлено");
   } catch (error) {
     setStatus(error.message || "Не вдалося оновити погоду.", true);
   } finally {
@@ -235,6 +208,7 @@ async function loadVillageWeather() {
 }
 
 updateLiveClock();
+enableSubtleParallax();
 setInterval(updateLiveClock, 1000);
 setInterval(updateTitleMarquee, titleMarqueeInterval);
 loadVillageWeather();

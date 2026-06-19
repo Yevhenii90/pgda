@@ -3,86 +3,79 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#e7e4df" />
     <title>PGDA</title>
-    <link
-      id="favicon"
-      rel="icon"
-      type="image/svg+xml"
-      href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="18" fill="%231d1d1f"/%3E%3Ctext x="32" y="42" text-anchor="middle" font-size="30"%3E%E2%98%81%EF%B8%8F%3C/text%3E%3C/svg%3E'
-    />
+    <link id="favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23232325'/%3E%3Ccircle cx='32' cy='32' r='12' fill='%23ededeb'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
-    <main class="scene" aria-labelledby="city-name">
-      <header class="scene-meta scene-meta-left">
-        <p id="weekday-label">---</p>
+  <body class="condition-cloudy">
+    <main class="studio" aria-labelledby="city-name">
+      <div class="ambient-glow" aria-hidden="true"></div>
+
+      <header class="date-lockup">
+        <p><span id="weekday-label">---</span><i></i></p>
         <p id="date-label">-- ---</p>
       </header>
+      <p class="year" id="year-label">----</p>
 
-      <div class="scene-meta scene-meta-right" id="year-label">----</div>
-
-      <section class="clock-block" aria-label="Поточний час">
+      <section class="clock" aria-label="Поточний місцевий час">
         <span id="live-hours">--:--</span>
-        <span class="clock-meridiem" id="live-meridiem">--</span>
       </section>
 
-      <div class="floating-controls" aria-hidden="true">
-        <button class="glass-arrow is-left" type="button">&#8592;</button>
-        <button class="glass-arrow is-right" type="button">&#8594;</button>
-      </div>
+      <section class="installation" id="installation">
+        <div class="decorative-planes" aria-hidden="true">
+          <span></span><span></span>
+        </div>
 
-      <section class="weather-stack">
         <article class="weather-card" aria-label="Актуальна погода">
-          <button class="ghost-close" type="button" aria-hidden="true">&#10005;</button>
-          <div class="weather-card__content">
-            <div class="weather-card__top">
-              <div>
-                <h1 id="city-name">Софіївська Борщагівка</h1>
-                <p id="region-label">Київська область</p>
-              </div>
-            </div>
+          <div class="card-surface"></div>
+          <div class="weather-card__heading">
+            <h1 id="city-name">Софіївська Борщагівка</h1>
+            <p id="region-label">Київська область</p>
+          </div>
 
-            <div class="cloud-stage" id="weather-visual" aria-hidden="true">
-              <div class="cloud cloud-small" id="cloud-small"></div>
-              <div class="cloud cloud-large" id="cloud-large"></div>
-              <div class="sun-disk" id="sun-disk"></div>
-              <div class="rain-layer" id="rain-layer">
-                <span></span><span></span><span></span><span></span><span></span>
-              </div>
-            </div>
+          <div class="weather-object" id="weather-visual" aria-hidden="true">
+            <div class="sun-sculpture"></div>
+            <div class="cloud cloud-back"><span></span><i></i><b></b></div>
+            <div class="cloud cloud-front"><span></span><i></i><b></b></div>
+            <div class="precipitation rain-particles"></div>
+            <div class="precipitation snow-particles"></div>
+            <div class="fog-volume fog-one"></div>
+            <div class="fog-volume fog-two"></div>
+            <div class="wind-ribbon wind-one"></div>
+            <div class="wind-ribbon wind-two"></div>
+            <div class="lightning"></div>
+          </div>
 
-            <div class="weather-card__bottom">
-              <strong id="temperature">--°</strong>
-              <div class="weather-card__meta">
-                <p id="card-date">-- ---</p>
-                <p id="condition">Очікуємо дані</p>
-              </div>
+          <div class="weather-card__footer">
+            <strong id="temperature">--°</strong>
+            <div>
+              <p id="condition">Очікуємо дані</p>
+              <p id="card-date">-- ---</p>
             </div>
           </div>
         </article>
 
-        <article class="week-card" aria-label="Прогноз на 5 днів">
-          <button class="ghost-close week-close" type="button" aria-hidden="true">&#10005;</button>
+        <article class="forecast-card" aria-label="Прогноз на п’ять днів">
+          <p class="forecast-card__label">Найближчі дні</p>
           <div class="week-strip" id="daily-list"></div>
         </article>
+
+        <div class="menu-object" aria-hidden="true"><span></span><span></span></div>
       </section>
 
-      <button class="menu-dot" type="button" aria-label="Меню">
-        <span></span>
-        <span></span>
-      </button>
+      <div class="rotary-controls" aria-hidden="true">
+        <div class="rotary"><span></span></div>
+        <div class="rotary"><span></span></div>
+      </div>
 
       <p class="status" id="status" role="status" aria-live="polite">
-        Завантажую погоду для Софіївської Борщагівки...
+        Завантажую актуальну погоду...
       </p>
     </main>
-
     <script src="app.js"></script>
   </body>
 </html>
