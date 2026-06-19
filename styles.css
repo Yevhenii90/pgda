@@ -100,8 +100,9 @@ button, input, select, textarea { font: inherit; }
   z-index: 6;
   top: 34px;
   left: 50%;
-  width: clamp(340px, 35vw, 430px);
-  height: 430px;
+  width: min(430px, 100%);
+  height: auto;
+  aspect-ratio: 1 / 1;
   transform: translateX(-50%);
   color: var(--paper);
   filter: drop-shadow(0 38px 38px rgba(38,35,32,.22));
@@ -230,7 +231,6 @@ body.condition-partly-cloudy .cloud-front { transform: translateX(30px) scale(.9
 body.condition-partly-cloudy .forecast-card { background: rgba(238,236,232,.62); }
 
 body.condition-cloudy .cloud-front, body.condition-overcast .cloud-front { transform: scale(1.08); }
-body.condition-overcast .weather-card { width: clamp(410px, 45vw, 540px); }
 body.condition-overcast .card-surface { background: linear-gradient(180deg, #39393d, #252529); }
 body.condition-overcast .cloud-back { transform: translateX(-60px) scale(1.16); opacity: .9; }
 body.condition-overcast .cloud-front { transform: translateX(34px) scale(1.18); }
@@ -246,7 +246,6 @@ body.condition-light-rain .weather-card__heading p,
 body.condition-light-rain .weather-card__footer p { color: rgba(37,37,39,.5); }
 body.condition-light-rain .weather-card__footer p:first-child { color: #252527; }
 body.condition-rain .rain-particles, body.condition-heavy-rain .rain-particles { opacity: .82; }
-body.condition-rain .weather-card, body.condition-heavy-rain .weather-card { height: 470px; }
 body.condition-heavy-rain .rain-particles { opacity: 1; background-size: auto; }
 body.condition-heavy-rain .card-surface { background: linear-gradient(145deg, #18181b, #0d0d0f); }
 body.condition-heavy-rain .cloud-front { transform: scale(1.15); filter: brightness(.76) drop-shadow(0 35px 22px rgba(0,0,0,.38)); }
@@ -320,8 +319,7 @@ body.condition-storm .studio { --studio-top: #cbc9c5; --studio-bottom: #aaa8a5; 
   .clock { top: 92px; }
   #live-hours { font-size: 3rem; }
   .installation { width: 100%; height: 730px; margin-top: 145px; }
-  .weather-card { width: 100%; height: 410px; }
-  body.condition-overcast .weather-card { width: 100%; }
+  .weather-card { width: 100%; height: auto; aspect-ratio: 1 / 1; }
   .weather-card__heading, .weather-card__footer { left: 22px; right: 22px; }
   .weather-card__heading h1 { max-width: 250px; font-size: 1.35rem; }
   .weather-object { inset: 85px -30px 94px -35px; transform: scale(.82); transform-origin: center; }
