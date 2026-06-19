@@ -89,7 +89,7 @@ button, input, select, textarea { font: inherit; }
 .installation {
   position: relative;
   width: min(820px, 78vw);
-  height: 770px;
+  height: 570px;
   margin: clamp(170px, 23vh, 225px) auto 0;
   transform: translate3d(var(--scene-shift-x), var(--scene-shift-y), 0);
   transition: transform .25s ease-out;
@@ -171,20 +171,19 @@ button, input, select, textarea { font: inherit; }
 .forecast-card {
   position: absolute;
   z-index: 4;
-  left: 50%;
-  top: 480px;
-  width: min(760px, calc(100vw - 52px));
+  left: 52%;
+  top: 338px;
+  width: min(590px, 56vw);
   min-height: 210px;
-  padding: 58px 24px 24px;
+  padding: 58px 24px 24px clamp(170px, 15vw, 210px);
   border: 1px solid rgba(255,255,255,.3);
   background: var(--glass);
   box-shadow: 0 28px 62px rgba(60,56,51,.14), inset 0 1px rgba(255,255,255,.4);
   backdrop-filter: blur(14px);
-  transform: translateX(-50%);
   transition: background .75s ease, border-color .75s ease, transform .75s ease;
 }
-.forecast-card__label { position: absolute; top: 20px; left: 24px; margin: 0; color: var(--muted); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; }
-.week-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.forecast-card__label { position: absolute; top: 20px; left: clamp(170px, 15vw, 210px); margin: 0; color: var(--muted); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; }
+.week-strip { display: grid; grid-template-columns: repeat(5, minmax(58px, 1fr)); gap: 10px; }
 .day-chip { display: grid; align-content: start; gap: 8px; min-width: 0; padding: 7px; border: 1px solid transparent; transition: background .25s ease, border-color .25s ease; }
 .day-chip.is-selected { border-color: rgba(32,32,34,.12); background: rgba(255,255,255,.28); }
 .day-chip__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
@@ -278,10 +277,10 @@ body.condition-frost .weather-card__footer p:first-child { color: #262628; }
 
 body.condition-wind .wind-ribbon { opacity: 1; }
 body.condition-wind .weather-card { transform: translateX(-50%) rotate(-1.25deg); }
-body.condition-wind .forecast-card { transform: translateX(-50%) rotate(1.2deg); }
+body.condition-wind .forecast-card { transform: translate(20px, 10px) rotate(1.2deg); }
 body.condition-strong-wind .wind-ribbon { opacity: 1; transform: scaleX(1.16) rotate(-9deg); }
 body.condition-strong-wind .weather-card { transform: translateX(-50%) rotate(-2deg); }
-body.condition-strong-wind .forecast-card { transform: translateX(-50%) rotate(2deg); }
+body.condition-strong-wind .forecast-card { transform: translate(38px, 15px) rotate(2deg); }
 
 body.condition-rain .studio, body.condition-heavy-rain .studio { --studio-top: #dddcd9; --studio-bottom: #c9c7c3; }
 body.condition-storm .studio { --studio-top: #cbc9c5; --studio-bottom: #aaa8a5; }
