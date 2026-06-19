@@ -130,7 +130,7 @@ async function fetchWeather(place) {
     latitude: place.latitude,
     longitude: place.longitude,
     current: "temperature_2m,weather_code",
-    daily: "weather_code,temperature_2m_max,sunrise,sunset",
+    daily: "weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset",
     timezone: "auto",
     forecast_days: "7",
   });
@@ -145,19 +145,41 @@ function applyWeatherScene(condition) {
   document.body.classList.add(`condition-${condition}`);
 }
 
+function getIsoWeekNumber(date) {
+  const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = utcDate.getUTCDay() || 7;
+  utcDate.setUTCDate(utcDate.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(utcDate.getUTCFullYear(), 0, 1));
+  return Math.ceil((((utcDate - yearStart) / 86400000) + 1) / 7);
+}
+
 function renderDaily(daily) {
-  const days = daily.time.slice(0, 5).map((time, index) => {
+  const days = daily.time.slice(1, 6).map((time, offset) => {
+    const index = offset + 1;
     const date = new Date(`${time}T12:00:00`);
+    const [conditionLabel] = getWeatherLabel(daily.weather_code[index]);
     return {
       day: weekdays[date.getDay()],
-      temp: Math.round(daily.temperature_2m_max[index]),
+      date: `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}`,
+      week: getIsoWeekNumber(date),
+      high: Math.round(daily.temperature_2m_max[index]),
+      low: Math.round(daily.temperature_2m_min[index]),
+      condition: conditionLabel,
     };
   });
 
   elements.dailyList.innerHTML = days.map((item) => `
     <article class="day-chip">
-      <span>${item.day}</span>
-      <strong>${item.temp}°</strong>
+      <div class="day-chip__heading">
+        <span>${item.day}</span>
+        <em>${item.date}</em>
+      </div>
+      <p>${item.condition}</p>
+      <div class="day-chip__temperatures">
+        <strong>${item.high}°</strong>
+        <b>${item.low}°</b>
+      </div>
+      <small>${item.week}-й тиждень</small>
     </article>
   `).join("");
 }
