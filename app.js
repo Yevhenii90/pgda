@@ -35,8 +35,6 @@ const elements = {
   weatherCard: document.querySelector(".weather-card"),
   cardSurface: document.querySelector(".card-surface"),
   weatherVisual: document.querySelector("#weather-visual"),
-  previousDay: document.querySelector("#previous-day"),
-  nextDay: document.querySelector("#next-day"),
 };
 
 const weatherCodes = {
@@ -210,11 +208,6 @@ function renderDaily(daily) {
   `).join("");
 }
 
-function updateNavigationButtons() {
-  elements.previousDay.disabled = !weatherData || selectedDayIndex <= 0;
-  elements.nextDay.disabled = !weatherData || selectedDayIndex >= weatherData.daily.time.length - 1;
-}
-
 function renderSelectedDay() {
   if (!weatherData) return;
 
@@ -238,7 +231,6 @@ function renderSelectedDay() {
   updateFavicon(conditionType);
   updatePageTitle(village.name, temperature, conditionLabel);
   renderDaily(weatherData.daily);
-  updateNavigationButtons();
 }
 
 function renderWeather(place, weather) {
@@ -253,14 +245,6 @@ function renderWeather(place, weather) {
   selectedDayIndex = preservedIndex >= 0 ? preservedIndex : todayDayIndex;
 
   elements.cityName.textContent = place.name;
-  renderSelectedDay();
-}
-
-function moveSelectedDay(direction) {
-  if (!weatherData) return;
-  const nextIndex = selectedDayIndex + direction;
-  if (nextIndex < 0 || nextIndex >= weatherData.daily.time.length) return;
-  selectedDayIndex = nextIndex;
   renderSelectedDay();
 }
 
@@ -291,9 +275,6 @@ async function loadVillageWeather() {
 
 updateLiveClock();
 enableSubtleParallax();
-elements.previousDay.addEventListener("click", () => moveSelectedDay(-1));
-elements.nextDay.addEventListener("click", () => moveSelectedDay(1));
-updateNavigationButtons();
 setInterval(updateLiveClock, 1000);
 setInterval(updateTitleMarquee, titleMarqueeInterval);
 loadVillageWeather();

@@ -220,16 +220,6 @@ button, input, select, textarea { font: inherit; }
 .menu-object { position: absolute; z-index: 7; left: calc(50% - 220px); bottom: 18px; width: 56px; height: 56px; border-radius: 50%; display: grid; place-content: center; gap: 5px; background: #1e1e20; box-shadow: 0 20px 35px rgba(0,0,0,.2); }
 .menu-object span { display: block; width: 19px; height: 1.5px; background: rgba(255,255,255,.72); }
 
-.rotary-controls { position: absolute; z-index: 7; left: 50%; bottom: 37px; display: flex; gap: 28px; transform: translateX(-50%); }
-.rotary { position: relative; width: 76px; height: 24px; padding: 0; border: 0; border-radius: 5px 5px 8px 8px; background: #202022; box-shadow: 0 14px 16px rgba(0,0,0,.3); cursor: pointer; transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease; }
-.rotary::before { content: ""; position: absolute; left: 11px; right: 11px; bottom: 8px; height: 24px; border-radius: 50%; background: #f3f2ef; }
-.rotary span { position: absolute; z-index: 2; left: 10px; right: 10px; bottom: 12px; height: 32px; border-radius: 50% / 28%; background: linear-gradient(90deg, #b9b8b5, #faf9f6 24% 74%, #c5c4c1); box-shadow: inset 0 3px 3px rgba(255,255,255,.8); }
-.rotary span::after { content: ""; position: absolute; top: 3px; left: 50%; width: 7px; height: 4px; border-radius: 50%; background: #464648; transform: translateX(-50%); }
-.rotary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 18px 20px rgba(0,0,0,.32); }
-.rotary:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 8px 11px rgba(0,0,0,.25); }
-.rotary:focus-visible { outline: 2px solid #303033; outline-offset: 8px; }
-.rotary:disabled { cursor: not-allowed; opacity: .32; }
-
 .status { left: 50%; bottom: 11px; max-width: 560px; transform: translateX(-50%); color: rgba(32,32,34,.42); font-size: .72rem; text-align: center; }
 .status.is-error { color: #642f2c; font-weight: 500; }
 
@@ -375,7 +365,6 @@ body:not(.condition-clear):not(.condition-light-rain) .weather-card__heading h1 
   body.condition-wind .forecast-card, body.condition-strong-wind .forecast-card { transform: translateX(-50%); }
   .decorative-planes { left: 4%; top: 135px; }
   .menu-object { left: 7%; bottom: 0; }
-  .rotary-controls { bottom: 70px; }
   .status { bottom: 25px; }
 }
 
@@ -395,7 +384,6 @@ body:not(.condition-clear):not(.condition-light-rain) .weather-card__heading h1 
   .week-strip { min-width: 500px; }
   .decorative-planes { display: none; }
   .menu-object { left: 4px; bottom: 0; transform: scale(.85); }
-  .rotary-controls { bottom: 58px; gap: 18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
