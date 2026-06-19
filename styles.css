@@ -237,6 +237,14 @@ body.condition-overcast .cloud-front { transform: translateX(34px) scale(1.18); 
 
 body.condition-drizzle .card-surface, body.condition-fog .card-surface { background: rgba(55,55,58,.68); backdrop-filter: blur(16px); }
 body.condition-drizzle .rain-particles { opacity: .42; }
+body.condition-light-rain .card-surface {
+  background: #e9e8e5 url("assets/light-rain.jpg") right center / cover no-repeat;
+}
+body.condition-light-rain .weather-object { opacity: 0; }
+body.condition-light-rain .weather-card { color: #252527; }
+body.condition-light-rain .weather-card__heading p,
+body.condition-light-rain .weather-card__footer p { color: rgba(37,37,39,.5); }
+body.condition-light-rain .weather-card__footer p:first-child { color: #252527; }
 body.condition-rain .rain-particles, body.condition-heavy-rain .rain-particles { opacity: .82; }
 body.condition-rain .weather-card, body.condition-heavy-rain .weather-card { height: 470px; }
 body.condition-heavy-rain .rain-particles { opacity: 1; background-size: auto; }
