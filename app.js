@@ -199,7 +199,7 @@ async function loadVillageWeather() {
     setStatus("Оновлюю актуальну погоду...");
     const weather = await fetchWeather(village);
     renderWeather(village, weather);
-    setStatus("Дані оновлено");
+    setStatus("ugin");
   } catch (error) {
     setStatus(error.message || "Не вдалося оновити погоду.", true);
   } finally {
