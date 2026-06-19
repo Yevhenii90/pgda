@@ -15,6 +15,9 @@ const weatherClasses = [
 let titleMarqueeText = "PGDA";
 let titleMarqueeIndex = 0;
 let isWeatherLoading = false;
+let weatherData = null;
+let selectedDayIndex = 0;
+let todayDayIndex = 0;
 
 const elements = {
   favicon: document.querySelector("#favicon"),
@@ -28,6 +31,8 @@ const elements = {
   dailyList: document.querySelector("#daily-list"),
   status: document.querySelector("#status"),
   installation: document.querySelector("#installation"),
+  previousDay: document.querySelector("#previous-day"),
+  nextDay: document.querySelector("#next-day"),
 };
 
 const weatherCodes = {
@@ -133,6 +138,7 @@ async function fetchWeather(place) {
     daily: "weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset",
     timezone: "auto",
     forecast_days: "7",
+    past_days: "1",
   });
 
   const response = await fetch(url);
@@ -154,8 +160,9 @@ function getIsoWeekNumber(date) {
 }
 
 function renderDaily(daily) {
-  const days = daily.time.slice(1, 6).map((time, offset) => {
-    const index = offset + 1;
+  const firstForecastIndex = todayDayIndex + 1;
+  const days = daily.time.slice(firstForecastIndex, firstForecastIndex + 5).map((time, offset) => {
+    const index = firstForecastIndex + offset;
     const date = new Date(`${time}T12:00:00`);
     const [conditionLabel] = getWeatherLabel(daily.weather_code[index]);
     return {
@@ -165,11 +172,12 @@ function renderDaily(daily) {
       high: Math.round(daily.temperature_2m_max[index]),
       low: Math.round(daily.temperature_2m_min[index]),
       condition: conditionLabel,
+      isSelected: index === selectedDayIndex,
     };
   });
 
   elements.dailyList.innerHTML = days.map((item) => `
-    <article class="day-chip">
+    <article class="day-chip${item.isSelected ? " is-selected" : ""}">
       <div class="day-chip__heading">
         <span>${item.day}</span>
         <em>${item.date}</em>
@@ -184,20 +192,57 @@ function renderDaily(daily) {
   `).join("");
 }
 
-function renderWeather(place, weather) {
-  const [conditionLabel, conditionType] = getWeatherLabel(weather.current.weather_code);
-  const temperature = Math.round(weather.current.temperature_2m);
-  const currentDate = new Date(weather.current.time);
+function updateNavigationButtons() {
+  elements.previousDay.disabled = !weatherData || selectedDayIndex <= 0;
+  elements.nextDay.disabled = !weatherData || selectedDayIndex >= weatherData.daily.time.length - 1;
+}
 
-  elements.cityName.textContent = place.name;
+function renderSelectedDay() {
+  if (!weatherData) return;
+
+  const isToday = selectedDayIndex === todayDayIndex;
+  const weatherCode = isToday
+    ? weatherData.current.weather_code
+    : weatherData.daily.weather_code[selectedDayIndex];
+  const temperature = isToday
+    ? Math.round(weatherData.current.temperature_2m)
+    : Math.round(weatherData.daily.temperature_2m_max[selectedDayIndex]);
+  const dateValue = weatherData.daily.time[selectedDayIndex];
+  const selectedDate = new Date(`${dateValue}T12:00:00`);
+  const [conditionLabel, conditionType] = getWeatherLabel(weatherCode);
+
   elements.temperature.textContent = `${temperature}°`;
-  elements.cardDate.textContent = formatDate(currentDate);
+  elements.cardDate.textContent = formatDate(selectedDate);
   elements.condition.textContent = conditionLabel;
 
   applyWeatherScene(conditionType);
   updateFavicon(conditionType);
-  updatePageTitle(place.name, temperature, conditionLabel);
-  renderDaily(weather.daily);
+  updatePageTitle(village.name, temperature, conditionLabel);
+  renderDaily(weatherData.daily);
+  updateNavigationButtons();
+}
+
+function renderWeather(place, weather) {
+  const previouslySelectedDate = weatherData?.daily.time[selectedDayIndex];
+  weatherData = weather;
+  todayDayIndex = weather.daily.time.indexOf(weather.current.time.slice(0, 10));
+  if (todayDayIndex < 0) todayDayIndex = 1;
+
+  const preservedIndex = previouslySelectedDate
+    ? weather.daily.time.indexOf(previouslySelectedDate)
+    : -1;
+  selectedDayIndex = preservedIndex >= 0 ? preservedIndex : todayDayIndex;
+
+  elements.cityName.textContent = place.name;
+  renderSelectedDay();
+}
+
+function moveSelectedDay(direction) {
+  if (!weatherData) return;
+  const nextIndex = selectedDayIndex + direction;
+  if (nextIndex < 0 || nextIndex >= weatherData.daily.time.length) return;
+  selectedDayIndex = nextIndex;
+  renderSelectedDay();
 }
 
 function enableSubtleParallax() {
@@ -227,6 +272,9 @@ async function loadVillageWeather() {
 
 updateLiveClock();
 enableSubtleParallax();
+elements.previousDay.addEventListener("click", () => moveSelectedDay(-1));
+elements.nextDay.addEventListener("click", () => moveSelectedDay(1));
+updateNavigationButtons();
 setInterval(updateLiveClock, 1000);
 setInterval(updateTitleMarquee, titleMarqueeInterval);
 loadVillageWeather();
