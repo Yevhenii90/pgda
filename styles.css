@@ -202,7 +202,6 @@ button, input, select, textarea { font: inherit; }
   backdrop-filter: blur(14px);
   transition: background .75s ease, border-color .75s ease, transform .75s ease;
 }
-.forecast-card__label { position: absolute; top: 20px; left: clamp(170px, 15vw, 210px); margin: 0; color: var(--muted); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; }
 .week-strip { display: grid; grid-template-columns: repeat(5, minmax(58px, 1fr)); gap: 10px; }
 .day-chip { display: grid; align-content: center; justify-items: center; gap: 10px; min-width: 0; min-height: 72px; padding: 6px; border: 1px solid transparent; background: transparent; color: inherit; font: inherit; cursor: pointer; transition: background .25s ease, border-color .25s ease, transform .25s ease; }
 .day-chip.is-selected { border-color: rgba(32,32,34,.12); background: rgba(255,255,255,.28); }
@@ -259,7 +258,7 @@ body.condition-storm .card-surface { background: linear-gradient(135deg, #101012
 body.condition-storm .cloud { filter: brightness(.58) contrast(1.2) drop-shadow(0 38px 26px rgba(0,0,0,.4)); }
 body.condition-storm .rain-particles, body.condition-storm .lightning { opacity: 1; }
 body.condition-storm .forecast-card { background: rgba(39,39,42,.78); color: #efeeeb; border-color: rgba(255,255,255,.12); }
-body.condition-storm .forecast-card__label, body.condition-storm .day-chip span { color: rgba(255,255,255,.45); }
+body.condition-storm .day-chip span { color: rgba(255,255,255,.45); }
 body.condition-storm .day-chip span, body.condition-storm .day-chip strong { color: #efeeeb; }
 body.condition-storm .day-chip.is-selected { border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.08); }
 
@@ -370,7 +369,6 @@ body.condition-partly-cloudy .weather-card__heading h1 {
   .installation { width: min(700px, 92vw); height: 760px; margin-top: 185px; }
   .weather-card { top: 0; }
   .forecast-card { top: 450px; left: 50%; width: min(660px, 92vw); padding: 58px 24px 24px; transform: translateX(-50%); }
-  .forecast-card__label { left: 24px; }
   body.condition-wind .forecast-card, body.condition-strong-wind .forecast-card { transform: translateX(-50%); }
   .decorative-planes { left: 4%; top: 135px; }
   .menu-object { left: 7%; bottom: 0; }
@@ -389,7 +387,6 @@ body.condition-partly-cloudy .weather-card__heading h1 {
   .weather-object { inset: 85px -30px 94px -35px; transform: scale(.82); transform-origin: center; }
   #temperature { font-size: 5.2rem; }
   .forecast-card { top: 430px; width: calc(100% - 12px); overflow-x: auto; padding-inline: 18px; }
-  .forecast-card__label { left: 18px; }
   .week-strip { min-width: 500px; }
   .decorative-planes { display: none; }
   .menu-object { left: 4px; bottom: 0; transform: scale(.85); }
