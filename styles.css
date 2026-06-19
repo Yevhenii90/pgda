@@ -257,7 +257,7 @@ body.condition-overcast .cloud-front { transform: translateX(34px) scale(1.18); 
 body.condition-drizzle .card-surface, body.condition-fog .card-surface { background: rgba(55,55,58,.68); backdrop-filter: blur(16px); }
 body.condition-drizzle .rain-particles { opacity: .42; }
 body.condition-light-rain .card-surface {
-  background: #e9e8e5 url("assets/light-rain.jpg") right center / cover no-repeat;
+  background: #4aa5d4 url("assets/light-rain.jpg?v=20260620-2") right center / cover no-repeat;
 }
 body.condition-light-rain .weather-object { opacity: 0; }
 body.condition-light-rain .weather-card { color: #252527; }
