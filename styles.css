@@ -71,12 +71,11 @@ button, input, select, textarea { font: inherit; }
   transition: opacity .8s ease, background .8s ease;
 }
 
-.date-lockup, .year, .clock, .status { position: absolute; z-index: 10; margin: 0; }
+.date-lockup, .clock, .status { position: absolute; z-index: 10; margin: 0; }
 .date-lockup { top: 38px; left: clamp(26px, 4vw, 58px); line-height: 1.05; }
 .date-lockup p { margin: 0; font-size: clamp(.9rem, 1.2vw, 1.06rem); letter-spacing: -.045em; }
 .date-lockup p:first-child { display: flex; align-items: center; gap: 10px; font-weight: 600; }
 .date-lockup i { display: block; width: 28px; height: 1.5px; background: currentColor; }
-.year { top: 38px; right: clamp(26px, 4vw, 58px); font-size: clamp(.9rem, 1.2vw, 1.05rem); font-weight: 600; }
 
 .clock {
   top: clamp(110px, 18vh, 182px);
@@ -291,7 +290,6 @@ body.condition-storm .studio { --studio-top: #cbc9c5; --studio-bottom: #aaa8a5; 
 @media (max-width: 560px) {
   .studio { padding-inline: 18px; padding-bottom: 150px; }
   .date-lockup { top: 24px; left: 18px; }
-  .year { top: 24px; right: 18px; }
   .clock { top: 92px; }
   #live-hours { font-size: 3rem; }
   .installation { width: 100%; height: 660px; margin-top: 145px; }

@@ -20,7 +20,6 @@ const elements = {
   favicon: document.querySelector("#favicon"),
   weekdayLabel: document.querySelector("#weekday-label"),
   dateLabel: document.querySelector("#date-label"),
-  yearLabel: document.querySelector("#year-label"),
   liveHours: document.querySelector("#live-hours"),
   cityName: document.querySelector("#city-name"),
   temperature: document.querySelector("#temperature"),
@@ -90,7 +89,6 @@ function updateLiveClock() {
   elements.liveHours.textContent = `${hours}:${minutes}`;
   elements.weekdayLabel.textContent = weekdays[now.getDay()];
   elements.dateLabel.textContent = formatDate(now);
-  elements.yearLabel.textContent = String(now.getFullYear());
 }
 
 function getFaviconArtwork(condition) {
