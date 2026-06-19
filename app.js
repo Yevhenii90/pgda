@@ -173,6 +173,7 @@ function renderDaily(daily) {
     const index = firstForecastIndex + offset;
     const date = new Date(`${time}T12:00:00`);
     return {
+      index,
       day: weekdays[date.getDay()],
       high: Math.round(daily.temperature_2m_max[index]),
       isSelected: index === selectedDayIndex,
@@ -180,11 +181,27 @@ function renderDaily(daily) {
   });
 
   elements.dailyList.innerHTML = days.map((item) => `
-    <article class="day-chip${item.isSelected ? " is-selected" : ""}">
+    <button
+      class="day-chip${item.isSelected ? " is-selected" : ""}"
+      type="button"
+      data-day-index="${item.index}"
+      aria-label="Показати прогноз на ${item.day}, ${item.high} градусів"
+    >
       <span>${item.day}</span>
       <strong>${item.high}°</strong>
-    </article>
+    </button>
   `).join("");
+}
+
+function selectForecastDay(event) {
+  const dayButton = event.target.closest("[data-day-index]");
+  if (!dayButton || !elements.dailyList.contains(dayButton)) return;
+
+  const nextIndex = Number(dayButton.dataset.dayIndex);
+  if (!Number.isInteger(nextIndex) || !weatherData?.daily.time[nextIndex]) return;
+
+  selectedDayIndex = nextIndex;
+  renderSelectedDay();
 }
 
 function renderSelectedDay() {
@@ -254,6 +271,7 @@ async function loadVillageWeather() {
 
 updateLiveClock();
 enableSubtleParallax();
+elements.dailyList.addEventListener("click", selectForecastDay);
 setInterval(updateLiveClock, 1000);
 setInterval(updateTitleMarquee, titleMarqueeInterval);
 loadVillageWeather();
