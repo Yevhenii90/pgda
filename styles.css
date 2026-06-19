@@ -89,7 +89,7 @@ button, input, select, textarea { font: inherit; }
 .installation {
   position: relative;
   width: min(820px, 78vw);
-  height: 570px;
+  height: 770px;
   margin: clamp(170px, 23vh, 225px) auto 0;
   transform: translate3d(var(--scene-shift-x), var(--scene-shift-y), 0);
   transition: transform .25s ease-out;
@@ -171,19 +171,20 @@ button, input, select, textarea { font: inherit; }
 .forecast-card {
   position: absolute;
   z-index: 4;
-  left: 52%;
-  top: 338px;
-  width: min(590px, 56vw);
+  left: 50%;
+  top: 480px;
+  width: min(760px, calc(100vw - 52px));
   min-height: 210px;
-  padding: 58px 24px 24px clamp(170px, 15vw, 210px);
+  padding: 58px 24px 24px;
   border: 1px solid rgba(255,255,255,.3);
   background: var(--glass);
   box-shadow: 0 28px 62px rgba(60,56,51,.14), inset 0 1px rgba(255,255,255,.4);
   backdrop-filter: blur(14px);
+  transform: translateX(-50%);
   transition: background .75s ease, border-color .75s ease, transform .75s ease;
 }
-.forecast-card__label { position: absolute; top: 20px; left: clamp(170px, 15vw, 210px); margin: 0; color: var(--muted); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; }
-.week-strip { display: grid; grid-template-columns: repeat(5, minmax(58px, 1fr)); gap: 10px; }
+.forecast-card__label { position: absolute; top: 20px; left: 24px; margin: 0; color: var(--muted); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; }
+.week-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
 .day-chip { display: grid; align-content: start; gap: 8px; min-width: 0; padding: 7px; border: 1px solid transparent; transition: background .25s ease, border-color .25s ease; }
 .day-chip.is-selected { border-color: rgba(32,32,34,.12); background: rgba(255,255,255,.28); }
 .day-chip__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
@@ -274,10 +275,10 @@ body.condition-frost .weather-card__footer p:first-child { color: #262628; }
 
 body.condition-wind .wind-ribbon { opacity: 1; }
 body.condition-wind .weather-card { transform: translateX(-50%) rotate(-1.25deg); }
-body.condition-wind .forecast-card { transform: translate(20px, 10px) rotate(1.2deg); }
+body.condition-wind .forecast-card { transform: translateX(-50%) rotate(1.2deg); }
 body.condition-strong-wind .wind-ribbon { opacity: 1; transform: scaleX(1.16) rotate(-9deg); }
 body.condition-strong-wind .weather-card { transform: translateX(-50%) rotate(-2deg); }
-body.condition-strong-wind .forecast-card { transform: translate(38px, 15px) rotate(2deg); }
+body.condition-strong-wind .forecast-card { transform: translateX(-50%) rotate(2deg); }
 
 body.condition-rain .studio, body.condition-heavy-rain .studio { --studio-top: #dddcd9; --studio-bottom: #c9c7c3; }
 body.condition-storm .studio { --studio-top: #cbc9c5; --studio-bottom: #aaa8a5; }
@@ -292,13 +293,13 @@ body.condition-storm .studio { --studio-top: #cbc9c5; --studio-bottom: #aaa8a5; 
 @media (max-width: 900px) {
   .studio { min-height: 100svh; overflow: auto; padding-bottom: 180px; }
   .clock { top: 120px; left: 50%; transform: translateX(-50%); }
-  .installation { width: min(600px, 92vw); height: 660px; margin-top: 185px; }
+  .installation { width: min(700px, 92vw); height: 760px; margin-top: 185px; }
   .weather-card { top: 0; }
-  .forecast-card { top: 400px; left: 50%; width: min(620px, 92vw); padding: 58px 24px 24px; transform: translateX(-50%); }
+  .forecast-card { top: 450px; left: 50%; width: min(660px, 92vw); padding: 58px 24px 24px; transform: translateX(-50%); }
   .forecast-card__label { left: 24px; }
   body.condition-wind .forecast-card, body.condition-strong-wind .forecast-card { transform: translateX(-50%); }
   .decorative-planes { left: 4%; top: 135px; }
-  .menu-object { left: 7%; bottom: 48px; }
+  .menu-object { left: 7%; bottom: 0; }
   .rotary-controls { bottom: 70px; }
   .status { bottom: 25px; }
 }
@@ -308,18 +309,18 @@ body.condition-storm .studio { --studio-top: #cbc9c5; --studio-bottom: #aaa8a5; 
   .date-lockup { top: 24px; left: 18px; }
   .clock { top: 92px; }
   #live-hours { font-size: 3rem; }
-  .installation { width: 100%; height: 660px; margin-top: 145px; }
+  .installation { width: 100%; height: 730px; margin-top: 145px; }
   .weather-card { width: 100%; height: 410px; }
   body.condition-overcast .weather-card { width: 100%; }
   .weather-card__heading, .weather-card__footer { left: 22px; right: 22px; }
   .weather-card__heading h1 { max-width: 250px; font-size: 1.35rem; }
   .weather-object { inset: 85px -30px 94px -35px; transform: scale(.82); transform-origin: center; }
   #temperature { font-size: 5.2rem; }
-  .forecast-card { top: 385px; width: calc(100% - 12px); overflow-x: auto; padding-inline: 18px; }
+  .forecast-card { top: 430px; width: calc(100% - 12px); overflow-x: auto; padding-inline: 18px; }
   .forecast-card__label { left: 18px; }
   .week-strip { min-width: 500px; }
   .decorative-planes { display: none; }
-  .menu-object { left: 4px; bottom: 45px; transform: scale(.85); }
+  .menu-object { left: 4px; bottom: 0; transform: scale(.85); }
   .rotary-controls { bottom: 58px; gap: 18px; }
 }
 
