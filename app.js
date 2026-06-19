@@ -32,6 +32,7 @@ const elements = {
   dailyList: document.querySelector("#daily-list"),
   status: document.querySelector("#status"),
   installation: document.querySelector("#installation"),
+  weatherCard: document.querySelector(".weather-card"),
   cardSurface: document.querySelector(".card-surface"),
   weatherVisual: document.querySelector("#weather-visual"),
   previousDay: document.querySelector("#previous-day"),
@@ -157,7 +158,7 @@ function applyWeatherScene(condition) {
   weatherClasses.forEach((name) => document.body.classList.remove(`condition-${name}`));
   document.body.classList.add(`condition-${condition}`);
 
-  const animatedLayers = [elements.cardSurface, elements.weatherVisual].filter(Boolean);
+  const animatedLayers = [elements.weatherCard, elements.cardSurface, elements.weatherVisual].filter(Boolean);
   animatedLayers.forEach((layer) => layer.classList.remove("is-weather-shifting"));
   void elements.cardSurface?.offsetWidth;
   animatedLayers.forEach((layer) => layer.classList.add("is-weather-shifting"));

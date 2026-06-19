@@ -138,6 +138,18 @@ button, input, select, textarea { font: inherit; }
 .weather-object.is-weather-shifting {
   animation: weather-object-shift .94s cubic-bezier(.22, .75, .25, 1) both;
 }
+
+.weather-card.is-weather-shifting .weather-card__heading {
+  animation: weather-copy-shift .72s .08s cubic-bezier(.22, .75, .25, 1) both;
+}
+
+.weather-card.is-weather-shifting #temperature {
+  animation: weather-copy-shift .78s .14s cubic-bezier(.22, .75, .25, 1) both;
+}
+
+.weather-card.is-weather-shifting .weather-card__footer div {
+  animation: weather-copy-shift .78s .2s cubic-bezier(.22, .75, .25, 1) both;
+}
 .sun-sculpture {
   position: absolute;
   left: 41%;
@@ -347,6 +359,10 @@ body:not(.condition-clear):not(.condition-light-rain) .weather-card__heading h1 
 @keyframes weather-object-shift {
   from { translate: 12% 0; }
   to { translate: 0 0; }
+}
+@keyframes weather-copy-shift {
+  from { translate: 24px 0; opacity: 0; }
+  to { translate: 0 0; opacity: 1; }
 }
 
 @media (max-width: 900px) {
