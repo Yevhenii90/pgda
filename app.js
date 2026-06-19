@@ -18,6 +18,7 @@ let isWeatherLoading = false;
 let weatherData = null;
 let selectedDayIndex = 0;
 let todayDayIndex = 0;
+let weatherTransitionTimer = null;
 
 const elements = {
   favicon: document.querySelector("#favicon"),
@@ -31,6 +32,8 @@ const elements = {
   dailyList: document.querySelector("#daily-list"),
   status: document.querySelector("#status"),
   installation: document.querySelector("#installation"),
+  cardSurface: document.querySelector(".card-surface"),
+  weatherVisual: document.querySelector("#weather-visual"),
   previousDay: document.querySelector("#previous-day"),
   nextDay: document.querySelector("#next-day"),
 };
@@ -153,6 +156,16 @@ async function fetchWeather(place) {
 function applyWeatherScene(condition) {
   weatherClasses.forEach((name) => document.body.classList.remove(`condition-${name}`));
   document.body.classList.add(`condition-${condition}`);
+
+  const animatedLayers = [elements.cardSurface, elements.weatherVisual].filter(Boolean);
+  animatedLayers.forEach((layer) => layer.classList.remove("is-weather-shifting"));
+  void elements.cardSurface?.offsetWidth;
+  animatedLayers.forEach((layer) => layer.classList.add("is-weather-shifting"));
+
+  window.clearTimeout(weatherTransitionTimer);
+  weatherTransitionTimer = window.setTimeout(() => {
+    animatedLayers.forEach((layer) => layer.classList.remove("is-weather-shifting"));
+  }, 950);
 }
 
 function getIsoWeekNumber(date) {

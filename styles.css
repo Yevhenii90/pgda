@@ -119,6 +119,10 @@ button, input, select, textarea { font: inherit; }
   transition: border-radius .75s ease, background .75s ease, opacity .75s ease, backdrop-filter .75s ease;
 }
 
+.card-surface.is-weather-shifting {
+  animation: card-surface-shift .82s cubic-bezier(.22, .75, .25, 1) both;
+}
+
 .weather-card__heading, .weather-card__footer { position: absolute; z-index: 12; left: 30px; right: 30px; }
 .weather-card__heading { top: 28px; }
 .weather-card__heading h1 { margin: 0; max-width: 290px; font-size: clamp(1.35rem, 2vw, 1.72rem); line-height: 1.02; letter-spacing: -.065em; font-weight: 600; }
@@ -131,6 +135,9 @@ button, input, select, textarea { font: inherit; }
 .weather-card__footer p:first-child { margin-bottom: 7px; color: rgba(245,244,241,.92); font-weight: 500; }
 
 .weather-object { position: absolute; z-index: 9; inset: 70px -90px 90px -65px; pointer-events: none; }
+.weather-object.is-weather-shifting {
+  animation: weather-object-shift .94s cubic-bezier(.22, .75, .25, 1) both;
+}
 .sun-sculpture {
   position: absolute;
   left: 41%;
@@ -333,6 +340,14 @@ body:not(.condition-clear):not(.condition-light-rain) .weather-card__heading h1 
 @keyframes fog { from { transform: translateX(-4%); } to { transform: translateX(5%); } }
 @keyframes wind { from { translate: -4% 0; } to { translate: 6% -7px; } }
 @keyframes flash { 0%, 8%, 10%, 100% { opacity: 0; } 9%, 11% { opacity: 1; } }
+@keyframes card-surface-shift {
+  from { translate: 14% 0; opacity: .25; }
+  to { translate: 0 0; opacity: 1; }
+}
+@keyframes weather-object-shift {
+  from { translate: 12% 0; }
+  to { translate: 0 0; }
+}
 
 @media (max-width: 900px) {
   .studio { min-height: 100svh; overflow: auto; padding-bottom: 180px; }
