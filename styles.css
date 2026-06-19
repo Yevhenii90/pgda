@@ -216,12 +216,15 @@ button, input, select, textarea { font: inherit; }
 
 /* Weather states */
 body.condition-clear { --studio-top: #f4f2ee; --studio-bottom: #dedbd6; }
-body.condition-clear .card-surface { background: linear-gradient(145deg, rgba(250,249,246,.93), rgba(198,197,193,.84)); border-radius: 1px; }
+body.condition-clear .card-surface {
+  border-radius: 1px;
+  background: #efeeeb url("assets/sunny-clear.jpg") right center / cover no-repeat;
+}
 body.condition-clear .weather-card { color: #252527; }
 body.condition-clear .weather-card__heading p, body.condition-clear .weather-card__footer p { color: rgba(37,37,39,.48); }
 body.condition-clear .weather-card__footer p:first-child { color: #252527; }
-body.condition-clear .sun-sculpture, body.condition-partly-cloudy .sun-sculpture { opacity: 1; transform: scale(1); }
-body.condition-clear .cloud { opacity: .08; transform: translateX(80px) scale(.76); }
+body.condition-clear .weather-object { opacity: 0; }
+body.condition-partly-cloudy .sun-sculpture { opacity: 1; transform: scale(1); }
 
 body.condition-partly-cloudy .sun-sculpture { left: 32%; }
 body.condition-partly-cloudy .cloud-front { transform: translateX(30px) scale(.9); }
