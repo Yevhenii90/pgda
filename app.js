@@ -8,7 +8,7 @@ const village = {
 const weatherRefreshInterval = 10 * 60 * 1000;
 const titleMarqueeInterval = 900;
 const weatherClasses = [
-  "clear", "partly-cloudy", "cloudy", "overcast", "drizzle", "rain",
+  "clear", "partly-cloudy", "variable-cloudy", "cloudy", "overcast", "drizzle", "rain",
   "light-rain", "short-rain", "heavy-rain", "storm", "snow", "heavy-snow", "fog", "wind",
   "strong-wind", "frost",
 ];
@@ -43,7 +43,7 @@ const elements = {
 const weatherCodes = {
   0: ["Ясно", "clear"],
   1: ["Переважно ясно", "partly-cloudy"],
-  2: ["Мінлива хмарність", "partly-cloudy"],
+  2: ["Мінлива хмарність", "variable-cloudy"],
   3: ["Суцільна хмарність", "overcast"],
   45: ["Туман", "fog"],
   48: ["Паморозь і туман", "frost"],
@@ -107,7 +107,7 @@ function updateLiveClock() {
 
 function getFaviconArtwork(condition) {
   const icons = {
-    clear: "☀", "partly-cloudy": "⛅", cloudy: "☁", overcast: "☁",
+    clear: "☀", "partly-cloudy": "⛅", "variable-cloudy": "☁", cloudy: "☁", overcast: "☁",
     drizzle: "🌧", "light-rain": "🌧", "short-rain": "🌧", rain: "🌧", "heavy-rain": "🌧", storm: "⛈",
     snow: "❄", "heavy-snow": "❄", fog: "≋", frost: "❄",
     wind: "≋", "strong-wind": "≋",
