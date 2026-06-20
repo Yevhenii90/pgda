@@ -214,6 +214,13 @@ button, input, select, textarea { font: inherit; }
   pointer-events: none;
   transition: background .75s ease, border-color .75s ease, transform .75s ease, opacity .38s ease, translate .38s ease, visibility 0s .38s;
 }
+.forecast-close { position: absolute; top: 17px; right: 17px; width: 38px; height: 38px; padding: 0; border: 0; border-radius: 50%; background: rgba(30,30,32,.08); cursor: pointer; transition: background .22s ease, transform .22s ease; }
+.forecast-close span { position: absolute; top: 50%; left: 50%; width: 18px; height: 1.5px; background: #252527; transform-origin: center; }
+.forecast-close span:first-child { transform: translate(-50%, -50%) rotate(45deg); }
+.forecast-close span:last-child { transform: translate(-50%, -50%) rotate(-45deg); }
+.forecast-close:hover { background: rgba(30,30,32,.15); transform: rotate(4deg); }
+.forecast-close:active { transform: scale(.92); }
+.forecast-close:focus-visible { outline: 2px solid #303033; outline-offset: 3px; }
 .week-strip { display: grid; grid-template-columns: repeat(5, minmax(58px, 1fr)); gap: 10px; }
 .day-chip { display: grid; align-content: center; justify-items: center; gap: 10px; min-width: 0; min-height: 72px; padding: 6px; border: 1px solid transparent; background: transparent; color: inherit; font: inherit; cursor: pointer; transition: background .25s ease, border-color .25s ease, transform .25s ease; }
 .day-chip.is-selected { border-color: rgba(32,32,34,.12); background: rgba(255,255,255,.28); }

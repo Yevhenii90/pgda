@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260620-17" />
+    <link rel="stylesheet" href="styles.css?v=20260620-18" />
   </head>
   <body class="condition-cloudy">
     <main class="studio" aria-labelledby="city-name">
@@ -53,6 +53,14 @@
         </article>
 
         <article class="forecast-card" id="daily-forecast" aria-label="Прогноз на п’ять днів">
+          <button
+            class="forecast-close"
+            id="forecast-close"
+            type="button"
+            aria-label="Закрити прогноз і показати погоду на сьогодні"
+          >
+            <span aria-hidden="true"></span><span aria-hidden="true"></span>
+          </button>
           <div class="week-strip" id="daily-list"></div>
         </article>
 
@@ -72,6 +80,6 @@
         Завантажую актуальну погоду...
       </p>
     </main>
-    <script src="app.js?v=20260620-6"></script>
+    <script src="app.js?v=20260620-7"></script>
   </body>
 </html>

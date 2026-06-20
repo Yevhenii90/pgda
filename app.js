@@ -37,6 +37,7 @@ const elements = {
   weatherVisual: document.querySelector("#weather-visual"),
   forecastCard: document.querySelector("#daily-forecast"),
   forecastToggle: document.querySelector("#forecast-toggle"),
+  forecastClose: document.querySelector("#forecast-close"),
 };
 
 const weatherCodes = {
@@ -207,12 +208,24 @@ function selectForecastDay(event) {
 }
 
 function toggleForecast() {
-  const isHidden = elements.forecastCard.classList.toggle("is-hidden");
-  elements.forecastToggle.setAttribute("aria-expanded", String(!isHidden));
+  setForecastVisibility(elements.forecastCard.classList.contains("is-hidden"));
+}
+
+function setForecastVisibility(isVisible) {
+  elements.forecastCard.classList.toggle("is-hidden", !isVisible);
+  elements.forecastToggle.setAttribute("aria-expanded", String(isVisible));
   elements.forecastToggle.setAttribute(
     "aria-label",
-    isHidden ? "Показати прогноз на наступні дні" : "Сховати прогноз на наступні дні"
+    isVisible ? "Сховати прогноз на наступні дні" : "Показати прогноз на наступні дні"
   );
+}
+
+function closeForecastAndShowToday() {
+  if (weatherData) {
+    selectedDayIndex = todayDayIndex;
+    renderSelectedDay();
+  }
+  setForecastVisibility(false);
 }
 
 function renderSelectedDay() {
@@ -284,6 +297,7 @@ updateLiveClock();
 enableSubtleParallax();
 elements.dailyList.addEventListener("click", selectForecastDay);
 elements.forecastToggle.addEventListener("click", toggleForecast);
+elements.forecastClose.addEventListener("click", closeForecastAndShowToday);
 setInterval(updateLiveClock, 1000);
 setInterval(updateTitleMarquee, titleMarqueeInterval);
 loadVillageWeather();
