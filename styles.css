@@ -200,7 +200,17 @@ button, input, select, textarea { font: inherit; }
   background: var(--glass);
   box-shadow: 0 28px 62px rgba(60,56,51,.14), inset 0 1px rgba(255,255,255,.4);
   backdrop-filter: blur(14px);
-  transition: background .75s ease, border-color .75s ease, transform .75s ease;
+  visibility: visible;
+  opacity: 1;
+  translate: 0 0;
+  transition: background .75s ease, border-color .75s ease, transform .75s ease, opacity .38s ease, translate .38s ease, visibility 0s;
+}
+.forecast-card.is-hidden {
+  visibility: hidden;
+  opacity: 0;
+  translate: 0 22px;
+  pointer-events: none;
+  transition: background .75s ease, border-color .75s ease, transform .75s ease, opacity .38s ease, translate .38s ease, visibility 0s .38s;
 }
 .week-strip { display: grid; grid-template-columns: repeat(5, minmax(58px, 1fr)); gap: 10px; }
 .day-chip { display: grid; align-content: center; justify-items: center; gap: 10px; min-width: 0; min-height: 72px; padding: 6px; border: 1px solid transparent; background: transparent; color: inherit; font: inherit; cursor: pointer; transition: background .25s ease, border-color .25s ease, transform .25s ease; }
@@ -212,8 +222,11 @@ button, input, select, textarea { font: inherit; }
 
 .decorative-planes { position: absolute; z-index: 5; left: calc(50% - 278px); top: 148px; display: flex; }
 .decorative-planes span { width: 68px; height: 68px; border: 1px solid rgba(255,255,255,.38); background: rgba(225,223,219,.43); box-shadow: 0 16px 34px rgba(55,51,47,.1); backdrop-filter: blur(10px); }
-.menu-object { position: absolute; z-index: 7; left: calc(50% - 220px); bottom: 18px; width: 56px; height: 56px; border-radius: 50%; display: grid; place-content: center; gap: 5px; background: #1e1e20; box-shadow: 0 20px 35px rgba(0,0,0,.2); }
+.menu-object { position: absolute; z-index: 7; left: calc(50% - 220px); bottom: 18px; width: 56px; height: 56px; padding: 0; border: 0; border-radius: 50%; display: grid; place-content: center; gap: 5px; background: #1e1e20; box-shadow: 0 20px 35px rgba(0,0,0,.2); cursor: pointer; transition: transform .22s ease, box-shadow .22s ease; }
 .menu-object span { display: block; width: 19px; height: 1.5px; background: rgba(255,255,255,.72); }
+.menu-object:hover { transform: translateY(-2px); box-shadow: 0 24px 40px rgba(0,0,0,.24); }
+.menu-object:active { transform: translateY(2px); }
+.menu-object:focus-visible { outline: 2px solid #303033; outline-offset: 5px; }
 
 .status { left: 50%; bottom: 11px; max-width: 560px; transform: translateX(-50%); color: rgba(32,32,34,.42); font-size: .72rem; text-align: center; }
 .status.is-error { color: #642f2c; font-weight: 500; }

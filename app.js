@@ -35,6 +35,8 @@ const elements = {
   weatherCard: document.querySelector(".weather-card"),
   cardSurface: document.querySelector(".card-surface"),
   weatherVisual: document.querySelector("#weather-visual"),
+  forecastCard: document.querySelector("#daily-forecast"),
+  forecastToggle: document.querySelector("#forecast-toggle"),
 };
 
 const weatherCodes = {
@@ -204,6 +206,15 @@ function selectForecastDay(event) {
   renderSelectedDay();
 }
 
+function toggleForecast() {
+  const isHidden = elements.forecastCard.classList.toggle("is-hidden");
+  elements.forecastToggle.setAttribute("aria-expanded", String(!isHidden));
+  elements.forecastToggle.setAttribute(
+    "aria-label",
+    isHidden ? "Показати прогноз на наступні дні" : "Сховати прогноз на наступні дні"
+  );
+}
+
 function renderSelectedDay() {
   if (!weatherData) return;
 
@@ -272,6 +283,7 @@ async function loadVillageWeather() {
 updateLiveClock();
 enableSubtleParallax();
 elements.dailyList.addEventListener("click", selectForecastDay);
+elements.forecastToggle.addEventListener("click", toggleForecast);
 setInterval(updateLiveClock, 1000);
 setInterval(updateTitleMarquee, titleMarqueeInterval);
 loadVillageWeather();
