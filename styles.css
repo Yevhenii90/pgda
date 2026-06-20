@@ -125,6 +125,37 @@ button, input, select, textarea { font: inherit; }
   animation: card-surface-shift .82s cubic-bezier(.22, .75, .25, 1) both;
 }
 
+.artwork-motion {
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+.artwork-motion.is-weather-shifting { animation: weather-object-shift .94s cubic-bezier(.22, .75, .25, 1) both; }
+.artwork-layer {
+  position: absolute;
+  inset: 0;
+  background: var(--art-image) right center / cover no-repeat;
+  transition: transform 1.8s cubic-bezier(.22, .75, .25, 1), filter 1.8s ease;
+  will-change: transform;
+}
+.artwork-layer--primary {
+  -webkit-mask-image: var(--art-mask-primary);
+  mask-image: var(--art-mask-primary);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transform-origin: var(--art-origin-primary, 70% 50%);
+}
+.artwork-layer--secondary {
+  -webkit-mask-image: var(--art-mask-secondary);
+  mask-image: var(--art-mask-secondary);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transform-origin: var(--art-origin-secondary, 70% 60%);
+}
+
 .weather-card__heading, .weather-card__footer { position: absolute; z-index: 12; left: 30px; right: 30px; }
 .weather-card__heading { top: 28px; }
 .weather-card__heading h1 { margin: 0; max-width: 290px; font-size: clamp(1.35rem, 2vw, 1.72rem); line-height: 1.02; letter-spacing: -.065em; font-weight: 600; }
@@ -248,7 +279,7 @@ button, input, select, textarea { font: inherit; }
 body.condition-clear { --studio-top: #f4f2ee; --studio-bottom: #dedbd6; }
 body.condition-clear .card-surface {
   border-radius: 1px;
-  background: #efeeeb url("assets/sunny-clear.jpg") right center / cover no-repeat;
+  background: linear-gradient(145deg, #51a8e4, #98ccef);
 }
 body.condition-clear .weather-card { color: #252527; }
 body.condition-clear .weather-card__heading p, body.condition-clear .weather-card__footer p { color: rgba(37,37,39,.48); }
@@ -258,7 +289,7 @@ body.condition-partly-cloudy .weather-object { opacity: 0; }
 body.condition-partly-cloudy .forecast-card { background: rgba(238,236,232,.62); }
 
 body.condition-variable-cloudy .card-surface {
-  background: #d9e0e7 url("assets/variable-clouds.jpg?v=20260620-1") right center / cover no-repeat;
+  background: linear-gradient(145deg, #e0e7ed, #aebdca);
 }
 body.condition-variable-cloudy .weather-object { opacity: 0; }
 body.condition-variable-cloudy .weather-card,
@@ -266,7 +297,7 @@ body.condition-variable-cloudy .weather-card__heading h1 { color: #252527; }
 
 body.condition-cloudy .cloud-front, body.condition-overcast .cloud-front { transform: scale(1.08); }
 body.condition-overcast .card-surface {
-  background: #d9e0e7 url("assets/overcast.jpg?v=20260620-1") right center / cover no-repeat;
+  background: linear-gradient(145deg, #e0e7ed, #aab8c5);
 }
 body.condition-overcast .weather-object { opacity: 0; }
 body.condition-overcast .weather-card,
@@ -277,7 +308,7 @@ body.condition-overcast .cloud-front { transform: translateX(34px) scale(1.18); 
 body.condition-drizzle .card-surface, body.condition-fog .card-surface { background: rgba(55,55,58,.68); backdrop-filter: blur(16px); }
 body.condition-drizzle .rain-particles { opacity: .42; }
 body.condition-light-rain .card-surface {
-  background: #4aa5d4 url("assets/light-rain.jpg?v=20260620-2") right center / cover no-repeat;
+  background: linear-gradient(145deg, #62b5df, #3f98ca);
 }
 body.condition-light-rain .weather-object { opacity: 0; }
 body.condition-light-rain .weather-card { color: #252527; }
@@ -285,7 +316,7 @@ body.condition-light-rain .weather-card__heading p,
 body.condition-light-rain .weather-card__footer p { color: rgba(37,37,39,.5); }
 body.condition-light-rain .weather-card__footer p:first-child { color: #252527; }
 body.condition-short-rain .card-surface {
-  background: #70b8df url("assets/short-rain.jpg?v=20260620-1") right center / cover no-repeat;
+  background: linear-gradient(145deg, #80c3e6, #55a8d5);
 }
 body.condition-short-rain .weather-object { opacity: 0; }
 body.condition-short-rain .weather-card { color: #252527; }
@@ -377,7 +408,7 @@ body:not(.condition-clear):not(.condition-light-rain):not(.condition-short-rain)
 }
 
 body.condition-partly-cloudy .weather-card .card-surface {
-  background: #c5b99d url("assets/mostly-clear.jpg?v=20260621-1") right center / cover no-repeat;
+  background: linear-gradient(145deg, #c9bea4, #a89b7f);
 }
 
 body.condition-partly-cloudy .weather-card,
@@ -392,12 +423,145 @@ body.condition-partly-cloudy .weather-card__heading h1 {
   mix-blend-mode: normal;
 }
 
+/* Image cards are split into a still backdrop and masked moving artwork. */
+body:is(
+  .condition-clear,
+  .condition-partly-cloudy,
+  .condition-variable-cloudy,
+  .condition-overcast,
+  .condition-light-rain,
+  .condition-short-rain
+) .artwork-motion { opacity: 1; }
+
+body.condition-clear .weather-card {
+  --art-image: url("assets/sunny-clear.jpg");
+  --art-mask-primary: radial-gradient(ellipse 48% 56% at 78% 54%, #000 0 58%, transparent 79%);
+  --art-mask-secondary: linear-gradient(transparent, transparent);
+  --art-origin-primary: 78% 54%;
+}
+
+body.condition-partly-cloudy .weather-card {
+  --art-image: url("assets/mostly-clear.jpg?v=20260621-1");
+  --art-mask-primary: radial-gradient(ellipse 54% 62% at 76% 54%, #000 0 58%, transparent 80%);
+  --art-mask-secondary: radial-gradient(ellipse 24% 20% at 61% 66%, #000 0 55%, transparent 78%);
+  --art-origin-primary: 76% 54%;
+  --art-origin-secondary: 61% 66%;
+}
+
+body.condition-variable-cloudy .weather-card {
+  --art-image: url("assets/variable-clouds.jpg?v=20260620-1");
+  --art-mask-primary: radial-gradient(ellipse 50% 40% at 69% 58%, #000 0 58%, transparent 80%);
+  --art-mask-secondary: radial-gradient(ellipse 26% 23% at 83% 37%, #000 0 52%, transparent 78%);
+  --art-origin-primary: 69% 58%;
+  --art-origin-secondary: 83% 37%;
+}
+
+body.condition-overcast .weather-card {
+  --art-image: url("assets/overcast.jpg?v=20260620-1");
+  --art-mask-primary: radial-gradient(ellipse 55% 46% at 69% 58%, #000 0 58%, transparent 80%);
+  --art-mask-secondary:
+    radial-gradient(ellipse 25% 20% at 53% 35%, #000 0 50%, transparent 78%),
+    radial-gradient(ellipse 26% 24% at 85% 43%, #000 0 52%, transparent 78%),
+    radial-gradient(ellipse 24% 22% at 82% 72%, #000 0 50%, transparent 78%);
+  --art-origin-primary: 69% 58%;
+  --art-origin-secondary: 78% 50%;
+}
+
+body.condition-light-rain .weather-card {
+  --art-image: url("assets/light-rain.jpg?v=20260620-2");
+  --art-mask-primary: radial-gradient(ellipse 52% 43% at 72% 47%, #000 0 58%, transparent 79%);
+  --art-mask-secondary: none;
+  --art-origin-primary: 72% 47%;
+  --art-origin-secondary: 70% 70%;
+}
+
+body.condition-short-rain .weather-card {
+  --art-image: url("assets/short-rain.jpg?v=20260620-1");
+  --art-mask-primary: radial-gradient(ellipse 52% 43% at 72% 47%, #000 0 58%, transparent 79%);
+  --art-mask-secondary: none;
+  --art-origin-primary: 72% 47%;
+  --art-origin-secondary: 70% 70%;
+}
+
+body:is(.condition-light-rain, .condition-short-rain) .artwork-layer--secondary {
+  inset: auto;
+  top: 61%;
+  left: 58%;
+  width: 124px;
+  height: 84px;
+  background: none;
+  filter: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+body:is(.condition-light-rain, .condition-short-rain) .artwork-layer--secondary::before,
+body:is(.condition-light-rain, .condition-short-rain) .artwork-layer--secondary::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 22px;
+  background: linear-gradient(145deg, rgba(230,248,255,.98), rgba(31,116,173,.82));
+  clip-path: polygon(50% 0, 83% 43%, 100% 69%, 93% 88%, 72% 100%, 28% 100%, 7% 88%, 0 69%, 17% 43%);
+  filter: drop-shadow(0 5px 4px rgba(23,90,139,.28));
+}
+body:is(.condition-light-rain, .condition-short-rain) .artwork-layer--secondary::before { left: 4px; top: 38px; }
+body:is(.condition-light-rain, .condition-short-rain) .artwork-layer--secondary::after { right: 8px; top: 4px; scale: .82; }
+
+@media (hover: hover) and (pointer: fine) {
+  body.condition-clear .weather-card:hover .artwork-layer--primary {
+    animation: artwork-sun-spin 16s linear infinite;
+    filter: saturate(1.04) brightness(1.03);
+  }
+
+  body.condition-partly-cloudy .weather-card:hover .artwork-layer--primary {
+    animation: artwork-sun-breathe 4.8s ease-in-out infinite alternate;
+  }
+  body.condition-partly-cloudy .weather-card:hover .artwork-layer--secondary {
+    animation: artwork-cloud-secondary 3.8s ease-in-out infinite alternate;
+  }
+
+  body:is(.condition-variable-cloudy, .condition-overcast) .weather-card:hover .artwork-layer--primary {
+    animation: artwork-cloud-primary 4.6s ease-in-out infinite alternate;
+  }
+  body:is(.condition-variable-cloudy, .condition-overcast) .weather-card:hover .artwork-layer--secondary {
+    animation: artwork-cloud-secondary 3.9s ease-in-out infinite alternate-reverse;
+  }
+
+  body:is(.condition-light-rain, .condition-short-rain) .weather-card:hover .artwork-layer--primary {
+    animation: artwork-cloud-primary 4.2s ease-in-out infinite alternate;
+  }
+  body:is(.condition-light-rain, .condition-short-rain) .weather-card:hover .artwork-layer--secondary {
+    animation: artwork-rain-drops 1.25s ease-in-out infinite;
+  }
+}
+
 @keyframes cloud-drift { from { translate: -7px 2px; } to { translate: 9px -4px; } }
 @keyframes rain { from { transform: translateY(-28px); } to { transform: translateY(20px); } }
 @keyframes snow { from { background-position: 4px 0, 19px 11px; } to { background-position: 24px 152px, -5px 125px; } }
 @keyframes fog { from { transform: translateX(-4%); } to { transform: translateX(5%); } }
 @keyframes wind { from { translate: -4% 0; } to { translate: 6% -7px; } }
 @keyframes flash { 0%, 8%, 10%, 100% { opacity: 0; } 9%, 11% { opacity: 1; } }
+@keyframes artwork-sun-spin {
+  from { transform: rotate(0deg) scale(1.005); }
+  to { transform: rotate(360deg) scale(1.005); }
+}
+@keyframes artwork-sun-breathe {
+  from { transform: translate3d(-2px, 1px, 0) rotate(-.35deg) scale(1.005); }
+  to { transform: translate3d(4px, -3px, 0) rotate(.55deg) scale(1.015); }
+}
+@keyframes artwork-cloud-primary {
+  from { transform: translate3d(-2px, 1px, 0) scale(1.004); }
+  to { transform: translate3d(5px, -3px, 0) scale(1.012); }
+}
+@keyframes artwork-cloud-secondary {
+  from { transform: translate3d(3px, -1px, 0) scale(.998); }
+  to { transform: translate3d(-4px, 3px, 0) scale(1.008); }
+}
+@keyframes artwork-rain-drops {
+  0% { transform: translate3d(0, -3px, 0); opacity: .82; }
+  70% { transform: translate3d(1px, 7px, 0); opacity: 1; }
+  100% { transform: translate3d(1px, 9px, 0); opacity: .16; }
+}
 @keyframes card-surface-shift {
   from { translate: 14% 0; opacity: .25; }
   to { translate: 0 0; opacity: 1; }
