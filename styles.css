@@ -269,6 +269,14 @@ body.condition-light-rain .weather-card { color: #252527; }
 body.condition-light-rain .weather-card__heading p,
 body.condition-light-rain .weather-card__footer p { color: rgba(37,37,39,.5); }
 body.condition-light-rain .weather-card__footer p:first-child { color: #252527; }
+body.condition-short-rain .card-surface {
+  background: #70b8df url("assets/short-rain.jpg?v=20260620-1") right center / cover no-repeat;
+}
+body.condition-short-rain .weather-object { opacity: 0; }
+body.condition-short-rain .weather-card { color: #252527; }
+body.condition-short-rain .weather-card__heading p,
+body.condition-short-rain .weather-card__footer p { color: rgba(37,37,39,.5); }
+body.condition-short-rain .weather-card__footer p:first-child { color: #252527; }
 body.condition-rain .rain-particles, body.condition-heavy-rain .rain-particles { opacity: .82; }
 body.condition-heavy-rain .rain-particles { opacity: 1; background-size: auto; }
 body.condition-heavy-rain .card-surface { background: linear-gradient(145deg, #18181b, #0d0d0f); }
@@ -318,6 +326,7 @@ body.condition-storm .studio { --studio-top: #cbc9c5; --studio-bottom: #aaa8a5; 
 body { --weather-panel: #202024; --weather-panel-text: #f5f4f1; }
 body.condition-clear,
 body.condition-light-rain,
+body.condition-short-rain,
 body.condition-snow,
 body.condition-heavy-snow,
 body.condition-frost { --weather-panel-text: #252527; }
@@ -335,7 +344,7 @@ body.condition-frost { --weather-panel: #d1d0cd; }
 body.condition-wind { --weather-panel: #3c3c40; }
 body.condition-strong-wind { --weather-panel: #242428; }
 
-body:not(.condition-clear):not(.condition-light-rain) .card-surface {
+body:not(.condition-clear):not(.condition-light-rain):not(.condition-short-rain) .card-surface {
   background: linear-gradient(90deg, var(--weather-panel) 0 50%, #f5f4f1 50% 100%);
 }
 
@@ -344,7 +353,7 @@ body:not(.condition-clear):not(.condition-light-rain) .card-surface {
 .weather-card__footer p,
 .weather-card__footer p:first-child { color: #252527; }
 
-body:not(.condition-clear):not(.condition-light-rain) .weather-card__heading h1 {
+body:not(.condition-clear):not(.condition-light-rain):not(.condition-short-rain) .weather-card__heading h1 {
   color: #fff;
   mix-blend-mode: difference;
 }

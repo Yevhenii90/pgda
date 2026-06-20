@@ -9,7 +9,7 @@ const weatherRefreshInterval = 10 * 60 * 1000;
 const titleMarqueeInterval = 900;
 const weatherClasses = [
   "clear", "partly-cloudy", "cloudy", "overcast", "drizzle", "rain",
-  "light-rain", "heavy-rain", "storm", "snow", "heavy-snow", "fog", "wind",
+  "light-rain", "short-rain", "heavy-rain", "storm", "snow", "heavy-snow", "fog", "wind",
   "strong-wind", "frost",
 ];
 let titleMarqueeText = "PGDA";
@@ -61,7 +61,7 @@ const weatherCodes = {
   73: ["Сніг", "snow"],
   75: ["Сильний сніг", "heavy-snow"],
   77: ["Сніжні зерна", "snow"],
-  80: ["Короткий дощ", "rain"],
+  80: ["Короткий дощ", "short-rain"],
   81: ["Зливи", "heavy-rain"],
   82: ["Сильні зливи", "heavy-rain"],
   85: ["Снігові зливи", "snow"],
@@ -108,7 +108,7 @@ function updateLiveClock() {
 function getFaviconArtwork(condition) {
   const icons = {
     clear: "☀", "partly-cloudy": "⛅", cloudy: "☁", overcast: "☁",
-    drizzle: "🌧", "light-rain": "🌧", rain: "🌧", "heavy-rain": "🌧", storm: "⛈",
+    drizzle: "🌧", "light-rain": "🌧", "short-rain": "🌧", rain: "🌧", "heavy-rain": "🌧", storm: "⛈",
     snow: "❄", "heavy-snow": "❄", fog: "≋", frost: "❄",
     wind: "≋", "strong-wind": "≋",
   };
