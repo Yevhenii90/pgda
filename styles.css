@@ -222,8 +222,6 @@ button, input, select, textarea { font: inherit; }
 .day-chip span { color: var(--ink); font-size: .92rem; font-weight: 600; }
 .day-chip strong { font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 500; letter-spacing: -.08em; }
 
-.decorative-planes { position: absolute; z-index: 5; left: calc(50% - 278px); top: 148px; display: flex; }
-.decorative-planes span { width: 68px; height: 68px; border: 1px solid rgba(255,255,255,.38); background: rgba(225,223,219,.43); box-shadow: 0 16px 34px rgba(55,51,47,.1); backdrop-filter: blur(10px); }
 .menu-object { position: absolute; z-index: 7; left: calc(50% - 220px); bottom: 18px; width: 56px; height: 56px; padding: 0; border: 0; border-radius: 50%; display: grid; place-content: center; gap: 5px; background: #1e1e20; box-shadow: 0 20px 35px rgba(0,0,0,.2); cursor: pointer; transition: transform .22s ease, box-shadow .22s ease; }
 .menu-object span { display: block; width: 19px; height: 1.5px; background: rgba(255,255,255,.72); }
 .menu-object:hover { transform: translateY(-2px); box-shadow: 0 24px 40px rgba(0,0,0,.24); }
@@ -385,7 +383,6 @@ body.condition-partly-cloudy .weather-card__heading h1 {
   .weather-card { top: 0; }
   .forecast-card { top: 450px; left: 50%; width: min(660px, 92vw); padding: 58px 24px 24px; transform: translateX(-50%); }
   body.condition-wind .forecast-card, body.condition-strong-wind .forecast-card { transform: translateX(-50%); }
-  .decorative-planes { left: 4%; top: 135px; }
   .menu-object { left: 7%; bottom: 0; }
   .status { bottom: 25px; }
 }
@@ -403,7 +400,6 @@ body.condition-partly-cloudy .weather-card__heading h1 {
   #temperature { font-size: 5.2rem; }
   .forecast-card { top: 430px; width: calc(100% - 12px); overflow-x: auto; padding-inline: 18px; }
   .week-strip { min-width: 500px; }
-  .decorative-planes { display: none; }
   .menu-object { left: 4px; bottom: 0; transform: scale(.85); }
 }
 
