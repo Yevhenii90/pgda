@@ -248,10 +248,7 @@ body.condition-clear .weather-card { color: #252527; }
 body.condition-clear .weather-card__heading p, body.condition-clear .weather-card__footer p { color: rgba(37,37,39,.48); }
 body.condition-clear .weather-card__footer p:first-child { color: #252527; }
 body.condition-clear .weather-object { opacity: 0; }
-body.condition-partly-cloudy .sun-sculpture { opacity: 1; transform: scale(1); }
-
-body.condition-partly-cloudy .sun-sculpture { left: 32%; }
-body.condition-partly-cloudy .cloud-front { transform: translateX(30px) scale(.9); }
+body.condition-partly-cloudy .weather-object { opacity: 0; }
 body.condition-partly-cloudy .forecast-card { background: rgba(238,236,232,.62); }
 
 body.condition-variable-cloudy .card-surface {
@@ -339,6 +336,7 @@ body { --weather-panel: #202024; --weather-panel-text: #f5f4f1; }
 body.condition-clear,
 body.condition-light-rain,
 body.condition-short-rain,
+body.condition-partly-cloudy,
 body.condition-variable-cloudy,
 body.condition-overcast,
 body.condition-snow,
@@ -358,7 +356,7 @@ body.condition-frost { --weather-panel: #d1d0cd; }
 body.condition-wind { --weather-panel: #3c3c40; }
 body.condition-strong-wind { --weather-panel: #242428; }
 
-body:not(.condition-clear):not(.condition-light-rain):not(.condition-short-rain):not(.condition-variable-cloudy):not(.condition-overcast) .card-surface {
+body:not(.condition-clear):not(.condition-light-rain):not(.condition-short-rain):not(.condition-partly-cloudy):not(.condition-variable-cloudy):not(.condition-overcast) .card-surface {
   background: linear-gradient(90deg, var(--weather-panel) 0 50%, #f5f4f1 50% 100%);
 }
 
@@ -367,23 +365,24 @@ body:not(.condition-clear):not(.condition-light-rain):not(.condition-short-rain)
 .weather-card__footer p,
 .weather-card__footer p:first-child { color: #252527; }
 
-body:not(.condition-clear):not(.condition-light-rain):not(.condition-short-rain):not(.condition-variable-cloudy):not(.condition-overcast) .weather-card__heading h1 {
+body:not(.condition-clear):not(.condition-light-rain):not(.condition-short-rain):not(.condition-partly-cloudy):not(.condition-variable-cloudy):not(.condition-overcast) .weather-card__heading h1 {
   color: #fff;
   mix-blend-mode: difference;
 }
 
 body.condition-partly-cloudy .weather-card .card-surface {
-  background: #111114;
+  background: #c5b99d url("assets/mostly-clear.jpg?v=20260621-1") right center / cover no-repeat;
 }
 
 body.condition-partly-cloudy .weather-card,
 body.condition-partly-cloudy .weather-card__heading h1,
 body.condition-partly-cloudy .weather-card__footer p,
 body.condition-partly-cloudy .weather-card__footer p:first-child {
-  color: #fff;
+  color: #252527;
 }
 
 body.condition-partly-cloudy .weather-card__heading h1 {
+  color: #252527;
   mix-blend-mode: normal;
 }
 
