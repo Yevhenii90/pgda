@@ -230,7 +230,13 @@ button, input, select, textarea { font: inherit; }
 .day-chip strong { font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 500; letter-spacing: -.08em; }
 
 .menu-object { position: absolute; z-index: 7; left: calc(50% - 220px); bottom: 18px; width: 56px; height: 56px; padding: 0; border: 0; border-radius: 50%; display: grid; place-content: center; gap: 5px; background: #1e1e20; box-shadow: 0 20px 35px rgba(0,0,0,.2); cursor: pointer; transition: transform .22s ease, box-shadow .22s ease; }
-.menu-object span { display: block; width: 19px; height: 1.5px; background: rgba(255,255,255,.72); }
+.menu-object span { position: absolute; top: 50%; left: 50%; display: block; width: 13px; height: 1.5px; background: rgba(255,255,255,.72); }
+.menu-object[aria-expanded="false"] span { left: calc(50% + 6px); transform-origin: right center; }
+.menu-object[aria-expanded="false"] span:first-child { transform: translate(-100%, -50%) rotate(45deg); }
+.menu-object[aria-expanded="false"] span:last-child { transform: translate(-100%, -50%) rotate(-45deg); }
+.menu-object[aria-expanded="true"] span { left: calc(50% - 6px); transform-origin: left center; }
+.menu-object[aria-expanded="true"] span:first-child { transform: translate(0, -50%) rotate(-45deg); }
+.menu-object[aria-expanded="true"] span:last-child { transform: translate(0, -50%) rotate(45deg); }
 .menu-object:hover { transform: translateY(-2px); box-shadow: 0 24px 40px rgba(0,0,0,.24); }
 .menu-object:active { transform: translateY(2px); }
 .menu-object:focus-visible { outline: 2px solid #303033; outline-offset: 5px; }
