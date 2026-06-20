@@ -1,5 +1,5 @@
 const village = {
-  name: "Софіївська Борщагівка",
+  name: "Дім",
   region: "Київська область",
   latitude: 50.4111405,
   longitude: 30.359975,
