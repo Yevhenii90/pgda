@@ -7,6 +7,7 @@ const village = {
 
 const weatherRefreshInterval = 10 * 60 * 1000;
 const titleMarqueeInterval = 900;
+const weatherTimezone = "Europe/Kyiv";
 const weatherClasses = [
   "clear", "partly-cloudy", "variable-cloudy", "cloudy", "overcast", "drizzle", "rain",
   "light-rain", "short-rain", "heavy-rain", "storm", "snow", "heavy-snow", "fog", "wind",
@@ -139,7 +140,124 @@ function updateTitleMarquee() {
   titleMarqueeIndex += 1;
 }
 
-async function fetchWeather(place) {
+function getLocalDateParts(value) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: weatherTimezone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date(value));
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+
+  return {
+    date: `${values.year}-${values.month}-${values.day}`,
+    hour: Number(values.hour),
+  };
+}
+
+function getMetSymbol(point, periods = ["next_1_hours", "next_6_hours", "next_12_hours"]) {
+  for (const period of periods) {
+    const symbol = point?.data?.[period]?.summary?.symbol_code;
+    if (symbol) return symbol;
+  }
+  return "cloudy";
+}
+
+function metSymbolToWeatherCode(symbolCode) {
+  const symbol = String(symbolCode || "cloudy").replace(/_(day|night|polartwilight)$/, "");
+
+  if (symbol.includes("thunder")) return symbol.includes("hail") ? 96 : 95;
+  if (symbol.includes("fog")) return 45;
+  if (symbol.includes("clearsky")) return 0;
+  if (symbol.includes("partlycloudy")) return 2;
+  if (symbol.includes("fair")) return 1;
+  if (symbol === "cloudy") return 3;
+  if (symbol.includes("heavyrainshowers")) return 82;
+  if (symbol.includes("lightrainshowers")) return 80;
+  if (symbol.includes("rainshowers")) return 81;
+  if (symbol.includes("heavyrain")) return 65;
+  if (symbol.includes("lightrain")) return 61;
+  if (symbol.includes("rain")) return 63;
+  if (symbol.includes("heavysnowshowers")) return 86;
+  if (symbol.includes("lightsnowshowers")) return 85;
+  if (symbol.includes("snowshowers")) return 85;
+  if (symbol.includes("heavysnow")) return 75;
+  if (symbol.includes("lightsnow")) return 71;
+  if (symbol.includes("snow") || symbol.includes("sleet")) return 73;
+  return 3;
+}
+
+function normalizeMetWeather(payload) {
+  const timeseries = payload?.properties?.timeseries;
+  if (!Array.isArray(timeseries) || timeseries.length === 0) {
+    throw new Error("MET Norway повернув порожній прогноз.");
+  }
+
+  const currentPoint = timeseries.find((point) =>
+    Number.isFinite(point?.data?.instant?.details?.air_temperature)
+  );
+  if (!currentPoint) throw new Error("MET Norway не повернув актуальну температуру.");
+
+  const days = new Map();
+  timeseries.forEach((point) => {
+    const temperature = point?.data?.instant?.details?.air_temperature;
+    if (!Number.isFinite(temperature)) return;
+
+    const local = getLocalDateParts(point.time);
+    if (!days.has(local.date)) days.set(local.date, []);
+    days.get(local.date).push({
+      hour: local.hour,
+      point,
+      temperature,
+      symbol: getMetSymbol(point, ["next_6_hours", "next_1_hours", "next_12_hours"]),
+    });
+  });
+
+  const dailyEntries = [...days.entries()]
+    .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
+    .map(([date, points]) => {
+      const representative = [...points].sort((a, b) =>
+        Math.abs(a.hour - 12) - Math.abs(b.hour - 12)
+      )[0];
+
+      return {
+        date,
+        temperature: Math.max(...points.map((point) => point.temperature)),
+        weatherCode: metSymbolToWeatherCode(representative.symbol),
+      };
+    });
+
+  const currentLocal = getLocalDateParts(currentPoint.time);
+  return {
+    source: "met.no",
+    current: {
+      time: currentLocal.date,
+      temperature_2m: currentPoint.data.instant.details.air_temperature,
+      weather_code: metSymbolToWeatherCode(getMetSymbol(currentPoint)),
+    },
+    daily: {
+      time: dailyEntries.map((entry) => entry.date),
+      weather_code: dailyEntries.map((entry) => entry.weatherCode),
+      temperature_2m_max: dailyEntries.map((entry) => entry.temperature),
+    },
+  };
+}
+
+async function fetchMetWeather(place) {
+  const url = new URL("https://api.met.no/weatherapi/locationforecast/2.0/compact");
+  url.search = new URLSearchParams({
+    lat: place.latitude.toFixed(4),
+    lon: place.longitude.toFixed(4),
+  });
+
+  const response = await fetch(url, { headers: { Accept: "application/json" } });
+  if (!response.ok) throw new Error(`MET Norway: HTTP ${response.status}`);
+  return normalizeMetWeather(await response.json());
+}
+
+async function fetchOpenMeteoWeather(place) {
   const url = new URL("https://api.open-meteo.com/v1/forecast");
   url.search = new URLSearchParams({
     latitude: place.latitude,
@@ -153,7 +271,18 @@ async function fetchWeather(place) {
 
   const response = await fetch(url);
   if (!response.ok) throw new Error("Не вдалося завантажити прогноз.");
-  return response.json();
+  const weather = await response.json();
+  weather.source = "open-meteo-fallback";
+  return weather;
+}
+
+async function fetchWeather(place) {
+  try {
+    return await fetchMetWeather(place);
+  } catch (error) {
+    console.warn("MET Norway недоступний, використовую резервне джерело.", error);
+    return fetchOpenMeteoWeather(place);
+  }
 }
 
 function applyWeatherScene(condition) {
@@ -257,6 +386,7 @@ function renderSelectedDay() {
 function renderWeather(place, weather) {
   const previouslySelectedDate = weatherData?.daily.time[selectedDayIndex];
   weatherData = weather;
+  document.body.dataset.weatherSource = weather.source || "unknown";
   todayDayIndex = weather.daily.time.indexOf(weather.current.time.slice(0, 10));
   if (todayDayIndex < 0) todayDayIndex = 1;
 
