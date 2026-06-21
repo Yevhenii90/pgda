@@ -434,11 +434,18 @@ body:is(
 ) .artwork-motion { opacity: 1; }
 
 body.condition-clear .weather-card {
-  --art-image: url("assets/sunny-clear.jpg");
-  --art-mask-primary: radial-gradient(ellipse 48% 56% at 78% 54%, #000 0 58%, transparent 79%);
-  --art-mask-secondary: linear-gradient(transparent, transparent);
-  --art-origin-primary: 78% 54%;
+  --art-image: url("assets/sunny-clear-sun-v2.png?v=20260621-2");
+  --art-mask-primary: none;
+  --art-mask-secondary: none;
+  --art-origin-primary: 50% 50%;
 }
+body.condition-clear .artwork-layer--primary {
+  inset: 9% 3% 12% 35%;
+  background: var(--art-image) center / contain no-repeat;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+body.condition-clear .artwork-layer--secondary { display: none; }
 
 body.condition-partly-cloudy .weather-card {
   --art-image: url("assets/mostly-clear.jpg?v=20260621-1");
