@@ -3,17 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#e7e4df" />
+    <meta id="theme-color" name="theme-color" content="#e7e4df" />
     <title>PGDA</title>
+    <script>
+      try {
+        const savedTheme = JSON.parse(localStorage.getItem("pgda-theme-override"));
+        const currentHour = new Date().getHours();
+        const initialTheme = ["day", "night"].includes(savedTheme?.theme) && savedTheme.expiresAt > Date.now()
+          ? savedTheme.theme
+          : (currentHour < 5 || currentHour >= 21 ? "night" : "day");
+        document.documentElement.dataset.theme = initialTheme;
+      } catch {}
+    </script>
     <link id="favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23232325'/%3E%3Ccircle cx='32' cy='32' r='12' fill='%23ededeb'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260622-27" />
+    <link rel="stylesheet" href="styles.css?v=20260623-28" />
   </head>
   <body class="condition-cloudy">
     <main class="studio" aria-labelledby="city-name">
       <div class="ambient-glow" aria-hidden="true"></div>
+
+      <button
+        class="theme-toggle"
+        id="theme-toggle"
+        type="button"
+        aria-label="Увімкнути нічну тему"
+        aria-pressed="false"
+      >
+        <span class="theme-toggle__track" aria-hidden="true">
+          <span class="theme-toggle__sun"></span>
+          <span class="theme-toggle__moon"></span>
+          <span class="theme-toggle__thumb"></span>
+        </span>
+      </button>
 
       <header class="date-lockup">
         <p><span id="weekday-label">---</span><i></i></p>
@@ -84,6 +108,6 @@
         Завантажую актуальну погоду...
       </p>
     </main>
-    <script src="app.js?v=20260621-12"></script>
+    <script src="app.js?v=20260623-13"></script>
   </body>
 </html>

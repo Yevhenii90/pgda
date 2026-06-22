@@ -7,6 +7,8 @@ const village = {
 
 const weatherRefreshInterval = 10 * 60 * 1000;
 const titleMarqueeInterval = 900;
+const themeRefreshInterval = 30 * 1000;
+const themeStorageKey = "pgda-theme-override";
 const weatherTimezone = "Europe/Kyiv";
 const weatherClasses = [
   "clear", "partly-cloudy", "variable-cloudy", "cloudy", "overcast", "drizzle", "rain",
@@ -20,9 +22,13 @@ let weatherData = null;
 let selectedDayIndex = 0;
 let todayDayIndex = 0;
 let weatherTransitionTimer = null;
+let solarSchedule = null;
+let activeTheme = "day";
 
 const elements = {
   favicon: document.querySelector("#favicon"),
+  themeColor: document.querySelector("#theme-color"),
+  themeToggle: document.querySelector("#theme-toggle"),
   weekdayLabel: document.querySelector("#weekday-label"),
   dateLabel: document.querySelector("#date-label"),
   liveHours: document.querySelector("#live-hours"),
@@ -105,6 +111,101 @@ function updateLiveClock() {
 
   elements.liveHours.textContent = `${hours}:${minutes}`;
   if (!weatherData) updateDateLockup(now);
+}
+
+function readThemeOverride() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(themeStorageKey));
+    if (!saved || !["day", "night"].includes(saved.theme) || !Number.isFinite(saved.expiresAt)) {
+      return null;
+    }
+    if (Date.now() >= saved.expiresAt) {
+      localStorage.removeItem(themeStorageKey);
+      return null;
+    }
+    return saved;
+  } catch {
+    return null;
+  }
+}
+
+function saveThemeOverride(theme, expiresAt) {
+  try {
+    localStorage.setItem(themeStorageKey, JSON.stringify({ theme, expiresAt }));
+  } catch {
+    // The theme still works when storage is unavailable.
+  }
+}
+
+function parseSolarTime(value) {
+  if (!value) return null;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function getFallbackSolarSchedule(now = new Date()) {
+  const sunrise = new Date(now);
+  sunrise.setHours(5, 0, 0, 0);
+  const sunset = new Date(now);
+  sunset.setHours(21, 0, 0, 0);
+  const nextSunrise = new Date(sunrise);
+  nextSunrise.setDate(nextSunrise.getDate() + 1);
+  return { sunrise, sunset, nextSunrise };
+}
+
+function updateSolarSchedule(weather) {
+  const daily = weather?.daily;
+  if (!daily?.time?.length || !daily.sunrise?.length || !daily.sunset?.length) {
+    solarSchedule = getFallbackSolarSchedule();
+    return;
+  }
+
+  const todayKey = getLocalDateParts(new Date()).date;
+  let index = daily.time.indexOf(todayKey);
+  if (index < 0) index = Math.max(0, todayDayIndex);
+
+  const sunrise = parseSolarTime(daily.sunrise[index]);
+  const sunset = parseSolarTime(daily.sunset[index]);
+  const nextSunrise = parseSolarTime(daily.sunrise[index + 1]);
+  solarSchedule = sunrise && sunset
+    ? { sunrise, sunset, nextSunrise: nextSunrise || getFallbackSolarSchedule().nextSunrise }
+    : getFallbackSolarSchedule();
+}
+
+function getAutoTheme(now = new Date()) {
+  const schedule = solarSchedule || getFallbackSolarSchedule(now);
+  return now < schedule.sunrise || now >= schedule.sunset ? "night" : "day";
+}
+
+function getNextSolarBoundary(now = new Date()) {
+  const schedule = solarSchedule || getFallbackSolarSchedule(now);
+  if (now < schedule.sunrise) return schedule.sunrise;
+  if (now < schedule.sunset) return schedule.sunset;
+  return schedule.nextSunrise || getFallbackSolarSchedule(now).nextSunrise;
+}
+
+function applyTheme(theme) {
+  activeTheme = theme;
+  document.documentElement.dataset.theme = theme;
+  elements.themeToggle?.setAttribute("aria-pressed", String(theme === "night"));
+  elements.themeToggle?.setAttribute(
+    "aria-label",
+    theme === "night" ? "Увімкнути денну тему" : "Увімкнути нічну тему"
+  );
+  if (elements.themeColor) {
+    elements.themeColor.content = theme === "night" ? "#090e16" : "#e7e4df";
+  }
+}
+
+function syncTheme() {
+  const override = readThemeOverride();
+  applyTheme(override?.theme || getAutoTheme());
+}
+
+function toggleTheme() {
+  const nextTheme = activeTheme === "night" ? "day" : "night";
+  saveThemeOverride(nextTheme, getNextSolarBoundary().getTime());
+  applyTheme(nextTheme);
 }
 
 function getFaviconArtwork(condition) {
@@ -276,9 +377,41 @@ async function fetchOpenMeteoWeather(place) {
   return weather;
 }
 
+async function fetchSolarTimes(place) {
+  const url = new URL("https://api.open-meteo.com/v1/forecast");
+  url.search = new URLSearchParams({
+    latitude: place.latitude,
+    longitude: place.longitude,
+    daily: "sunrise,sunset",
+    timezone: "auto",
+    forecast_days: "7",
+    past_days: "1",
+  });
+
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Не вдалося завантажити час сходу й заходу.");
+  return response.json();
+}
+
+function attachSolarTimes(weather, solarData) {
+  if (!weather?.daily?.time || !solarData?.daily?.time) return weather;
+  const solarByDate = new Map(solarData.daily.time.map((date, index) => [date, {
+    sunrise: solarData.daily.sunrise[index],
+    sunset: solarData.daily.sunset[index],
+  }]));
+
+  weather.daily.sunrise = weather.daily.time.map((date) => solarByDate.get(date)?.sunrise || null);
+  weather.daily.sunset = weather.daily.time.map((date) => solarByDate.get(date)?.sunset || null);
+  return weather;
+}
+
 async function fetchWeather(place) {
   try {
-    return await fetchMetWeather(place);
+    const [weather, solarData] = await Promise.all([
+      fetchMetWeather(place),
+      fetchSolarTimes(place).catch(() => null),
+    ]);
+    return attachSolarTimes(weather, solarData);
   } catch (error) {
     console.warn("MET Norway недоступний, використовую резервне джерело.", error);
     return fetchOpenMeteoWeather(place);
@@ -389,6 +522,8 @@ function renderWeather(place, weather) {
   document.body.dataset.weatherSource = weather.source || "unknown";
   todayDayIndex = weather.daily.time.indexOf(weather.current.time.slice(0, 10));
   if (todayDayIndex < 0) todayDayIndex = 1;
+  updateSolarSchedule(weather);
+  syncTheme();
 
   const preservedIndex = previouslySelectedDate
     ? weather.daily.time.indexOf(previouslySelectedDate)
@@ -425,11 +560,14 @@ async function loadVillageWeather() {
 }
 
 updateLiveClock();
+syncTheme();
 enableSubtleParallax();
+elements.themeToggle.addEventListener("click", toggleTheme);
 elements.dailyList.addEventListener("click", selectForecastDay);
 elements.forecastToggle.addEventListener("click", toggleForecast);
 elements.forecastClose.addEventListener("click", closeForecastAndShowToday);
 setInterval(updateLiveClock, 1000);
 setInterval(updateTitleMarquee, titleMarqueeInterval);
+setInterval(syncTheme, themeRefreshInterval);
 loadVillageWeather();
 setInterval(loadVillageWeather, weatherRefreshInterval);
