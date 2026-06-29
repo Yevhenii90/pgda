@@ -13,7 +13,7 @@ const weatherTimezone = "Europe/Kyiv";
 const weatherClasses = [
   "clear", "partly-cloudy", "variable-cloudy", "cloudy", "overcast", "drizzle", "rain",
   "light-rain", "short-rain", "heavy-rain", "storm", "snow", "heavy-snow", "fog", "wind",
-  "strong-wind", "frost",
+  "strong-wind", "frost", "hot",
 ];
 let titleMarqueeText = "PGDA";
 let titleMarqueeIndex = 0;
@@ -418,9 +418,10 @@ async function fetchWeather(place) {
   }
 }
 
-function applyWeatherScene(condition) {
+function applyWeatherScene(condition, temperature) {
   weatherClasses.forEach((name) => document.body.classList.remove(`condition-${name}`));
   document.body.classList.add(`condition-${condition}`);
+  if (temperature >= 25) document.body.classList.add("condition-hot");
 
   const animatedLayers = [elements.weatherCard, elements.cardSurface, elements.artworkMotion, elements.weatherVisual].filter(Boolean);
   animatedLayers.forEach((layer) => layer.classList.remove("is-weather-shifting"));
@@ -510,7 +511,7 @@ function renderSelectedDay() {
   elements.condition.textContent = conditionLabel;
   updateDateLockup(selectedDate);
 
-  applyWeatherScene(conditionType);
+  applyWeatherScene(conditionType, temperature);
   updateFavicon(conditionType);
   updatePageTitle(village.name, temperature, conditionLabel);
   renderDaily(weatherData.daily);

@@ -539,6 +539,7 @@ body.condition-partly-cloudy .weather-card__heading h1 {
 /* Image cards use clean transparent foregrounds so every object stays fully visible. */
 body:is(
   .condition-clear,
+  .condition-hot,
   .condition-partly-cloudy,
   .condition-variable-cloudy,
   .condition-overcast,
@@ -649,6 +650,32 @@ body:is(.condition-light-rain, .condition-short-rain) .artwork-layer--secondary:
 body:is(.condition-light-rain, .condition-short-rain) .artwork-layer--secondary::before { left: 4px; top: 38px; }
 body:is(.condition-light-rain, .condition-short-rain) .artwork-layer--secondary::after { right: 8px; top: 4px; scale: .82; }
 
+body.condition-hot .card-surface {
+  border-radius: 1px;
+  background: #eeb42e;
+}
+body.condition-hot .weather-card {
+  --art-image: url("assets/hot-sun.png?v=20260629-1");
+  --art-mask-primary: none;
+  --art-mask-secondary: none;
+  --art-origin-primary: 64% 50%;
+  color: #252527;
+}
+body.condition-hot .weather-card__heading h1,
+body.condition-hot .weather-card__footer p,
+body.condition-hot .weather-card__footer p:first-child {
+  color: #252527;
+  mix-blend-mode: normal;
+}
+body.condition-hot .weather-object { opacity: 0; }
+body.condition-hot .artwork-layer--primary {
+  inset: 0;
+  background: var(--art-image) center / cover no-repeat;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+body.condition-hot .artwork-layer--secondary { display: none; }
+
 @media (hover: hover) and (pointer: fine) {
   body.condition-clear .weather-card:hover .artwork-layer--primary {
     animation: artwork-sun-spin 16s linear infinite;
@@ -675,6 +702,11 @@ body:is(.condition-light-rain, .condition-short-rain) .artwork-layer--secondary:
   body:is(.condition-light-rain, .condition-short-rain) .weather-card:hover .artwork-layer--secondary {
     animation: artwork-rain-drops 1.25s ease-in-out infinite;
   }
+
+  body.condition-hot .weather-card:hover .artwork-layer--primary {
+    animation: artwork-hot-sun-melt 5.8s ease-in-out infinite alternate;
+    filter: saturate(1.04) brightness(1.02);
+  }
 }
 
 @keyframes cloud-drift { from { translate: -7px 2px; } to { translate: 9px -4px; } }
@@ -690,6 +722,10 @@ body:is(.condition-light-rain, .condition-short-rain) .artwork-layer--secondary:
 @keyframes artwork-sun-breathe {
   from { transform: translate3d(-2px, 1px, 0) rotate(-.35deg) scale(1.005); }
   to { transform: translate3d(4px, -3px, 0) rotate(.55deg) scale(1.015); }
+}
+@keyframes artwork-hot-sun-melt {
+  from { transform: translate3d(-2px, 0, 0) scale(1.002); }
+  to { transform: translate3d(4px, -3px, 0) scale(1.014); }
 }
 @keyframes artwork-cloud-primary {
   from { transform: translate3d(-2px, 1px, 0) scale(1.004); }
